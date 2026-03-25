@@ -8,7 +8,7 @@ class Prestamo{
         int diasPermitidos;
     public:
         Prestamo();
-        Prestamo(int diasPermitidos,DTFecha fechaPrestamo);
+        Prestamo(Material* material, int diasPermitidos, DTFecha fechaPrestamo);
         Prestamo(Prestamo &c);
         int getDíasPermitidos();
         DTFecha getFechaPrestamo();

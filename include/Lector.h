@@ -4,10 +4,10 @@
 
 class Lector {
     private:
-    int ci;
-    string nombre;
-    DTFecha fechaNacimiento;
-    Prestamo* prestamos[10];
+        int ci;
+        string nombre;
+        DTFecha fechaNacimiento;
+        Prestamo* prestamos[10];
 
     public:
     Lector();
