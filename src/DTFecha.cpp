@@ -1,28 +1,43 @@
-#include "DTFecha.h"
+#include "../include/DTFecha.h"
 
 DTFecha::DTFecha() {
-    dia = 0;
-    mes = 0;
-    año = 0;
+    dia = 1;
+    mes = 1;
+    año = 1900;
 }
 DTFecha::DTFecha(int dia, int mes, int año) {
     this->dia = dia;
     this->mes = mes;
     this->año = año;
 }
-DTFecha::DTFecha(DTFecha &c) {
+DTFecha::DTFecha(const DTFecha &c) {
     this->dia = c.dia;
     this->mes = c.mes;
     this->año = c.año;
 }
-int DTFecha::getDia() {
+int DTFecha::getDia() const {
     return dia;
 }
-int DTFecha::getMes() {
+int DTFecha::getMes() const {
     return mes;
 }
-int DTFecha::getAño() {
-    return año;
+int DTFecha::getAnio() const {
+    return anio;
+}
+
+bool DTFecha::esmenorFecha(DTFecha fechaComparada, DTFecha fecha2) {
+    if (fechaComparada.anio < fecha2.anio) {
+        return true;
+    } else if (fechaComparada.anio == fecha2.anio) {
+        if (fechaComparada.mes < fecha2.mes) {
+            return true;
+        } else if (fechaComparada.mes == fecha2.mes) {
+            if (fechaComparada.dia < fecha2.dia) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 DTFecha::~DTFecha() {
 }
