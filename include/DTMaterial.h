@@ -1,14 +1,15 @@
 #ifndef DT_MATERIAL_H
 #define DT_MATERIAL_H
+#include <string>
 
 class DTMaterial
 {
 public:
-    char *codigo;
-    char *titulo;
+    std::string codigo;
+    std::string titulo;
     int anioPublicacion;
     DTMaterial();
-    DTMaterial(char *codigo, char *titulo, int anioPublicacion);
+    DTMaterial(std::string codigo, std::string titulo, int anioPublicacion);
     ~DTMaterial();
 };
 #endif

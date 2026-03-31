@@ -1,22 +1,23 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
+#include <string>
 
 class Material
 {
 private:
-    char *codigo;
-    char *titulo;
+    std::string codigo;
+    std::string titulo;
     int anioPublicacion;
 
 public:
-    char *getCodigo();
-    char *getTitulo();
+    std::string getCodigo();
+    std::string getTitulo();
     int getAnioPublicacion();
-    void setCodigo(char *codigo);
-    void setTitulo(char *titulo);
+    void setCodigo(std::string codigo);
+    void setTitulo(std::string titulo);
     void setAnioPublicacion(int anioPublicacion);
     Material();
-    Material(char *codigo, char *titulo, int anioPublicacion);
+    Material(std::string codigo, std::string titulo, int anioPublicacion);
     virtual ~Material();
     virtual float calcularMulta(int diasAtraso) = 0;
 };
