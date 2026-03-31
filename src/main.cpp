@@ -1,9 +1,15 @@
 #include <iostream>
 #include <string>
+#define MAX_LECTORES 50
 
 enum Menu {
     ing_opcion, reg_lector, ag_prestamo, obt_mats, cons_multa, ver_prestamos, ag_material, salir
 };
+
+// -- FUNCIONES --
+void registrarLector(int ci, string nombre, DTFecha fechaRegistro);
+void agregarPrestamo(int ciLector, Material* material, int diasPermitidos, DTFecha fechaPrestamo);
+DTMaterial* obtenerMaterialesPrestados(int ciLector);
 
 int main () {
     int opcionUser;
@@ -26,8 +32,16 @@ int main () {
     Menu opc = static_cast<Menu>(opcionUser);
     switch (opc) {
         case 1:
-            std::cout << "Ingresaste: " << opc;
-            break;
+                std::cout << "Registrar un lector" << std::endl;
+                std::cout << "Ingrese nombre del lector: ";
+                std::fflush(stdin); // Limpiar el buffer si vienes de leer un int
+                std::getline(std::cin, nombreLector); 
+                std::cout << "Ingrese la CI: ";
+                std::cin >> ciLector;
+                std::cout << "Ingrese la fecha de registro (dd mm aaaa): ";
+                std::cin >> dia >> mes >> anio;
+                registrarLector(ciLector, nombreLector, fechaActual);
+                break;
         case 2:
 
             std::cout << "Ingresaste: " << opc;
