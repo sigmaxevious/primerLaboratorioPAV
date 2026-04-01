@@ -4,13 +4,13 @@
 #include <string>
 #include "DTFecha.h"
 
-class Lector
-{
-private:
-    int ci;
-    std::string nombre;
-    DTFecha fechaNacimiento;
-    Prestamo *prestamos[10];
+class Lector {
+    private:
+        int ci;
+        string nombre;
+        DTFecha fechaRegistro;
+        Prestamo* prestamos[10];
+        int cantidadPrestamos;
 
 public:
     Lector();
@@ -19,6 +19,7 @@ public:
     int getCi();
     std::string getNombre();
     DTFecha getFecha();
+    void addPrestamo(Prestamo* prestamo);
     ~Lector();
 };
 #endif
