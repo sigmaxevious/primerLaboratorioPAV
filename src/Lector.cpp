@@ -1,19 +1,24 @@
 #include "Lector.h"
+#include <string>
 
-Lector::Lector() {
+Lector::Lector()
+{
     this->ci = 0;
     this->nombre = "";
     this->fechaNacimiento = DTFecha();
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 10; i++)
+    {
         this->prestamos[i] = nullptr;
     }
 }
 
-Lector::Lector(int ci, string nombre, DTFecha fechaNacimiento) {
+Lector::Lector(int ci, std::string nombre, DTFecha fechaNacimiento)
+{
     this->ci = ci;
     this->nombre = nombre;
     this->fechaNacimiento = fechaNacimiento;
-    for (int i = 0; i < 10; i++) {
-        this->prestamos[i] = ;
+    for (int i = 0; i < 10; i++)
+    {
+        this->prestamos[i] = nullptr;
     }
 }

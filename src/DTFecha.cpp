@@ -1,28 +1,36 @@
-#include "DTFecha.h"
+#include "../include/DTFecha.h"
+#include <string>
 
-DTFecha::DTFecha() {
+DTFecha::DTFecha()
+{
     dia = 0;
     mes = 0;
-    año = 0;
+    anio = 0;
 }
-DTFecha::DTFecha(int dia, int mes, int año) {
+DTFecha::DTFecha(int dia, int mes, int anio)
+{
     this->dia = dia;
     this->mes = mes;
-    this->año = año;
+    this->anio = anio;
 }
-DTFecha::DTFecha(DTFecha &c) {
+DTFecha::DTFecha(DTFecha &c)
+{
     this->dia = c.dia;
     this->mes = c.mes;
-    this->año = c.año;
+    this->anio = c.anio;
 }
-int DTFecha::getDia() {
+int DTFecha::getDia()
+{
     return dia;
 }
-int DTFecha::getMes() {
+int DTFecha::getMes()
+{
     return mes;
 }
-int DTFecha::getAño() {
-    return año;
+int DTFecha::getAnio()
+{
+    return anio;
 }
-DTFecha::~DTFecha() {
+DTFecha::~DTFecha()
+{
 }

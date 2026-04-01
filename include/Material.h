@@ -18,6 +18,7 @@ public:
     void setAnioPublicacion(int anioPublicacion);
     Material();
     Material(std::string codigo, std::string titulo, int anioPublicacion);
+    Material(Material &c);
     virtual ~Material();
     virtual float calcularMulta(int diasAtraso) = 0;
 };

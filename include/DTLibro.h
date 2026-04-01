@@ -9,6 +9,7 @@ public:
     int cantPaginas;
     DTLibro();
     DTLibro(std::string autor, int cantPaginas);
+    DTLibro(DTLibro &c);
     ~DTLibro();
 };
 #endif

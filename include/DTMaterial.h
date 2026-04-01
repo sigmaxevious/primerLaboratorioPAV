@@ -10,6 +10,7 @@ public:
     int anioPublicacion;
     DTMaterial();
     DTMaterial(std::string codigo, std::string titulo, int anioPublicacion);
+    DTMaterial(DTMaterial &c);
     ~DTMaterial();
 };
 #endif

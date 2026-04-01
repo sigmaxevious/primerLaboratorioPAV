@@ -10,7 +10,7 @@ private:
 
 public:
     int getNumeroEdicion();
-    bool isEsMensual();
+    bool siesMensual();
     void setNumeroEdicion(int cantPaginas);
     void setEsMensual(bool esMensual);
     Revista();

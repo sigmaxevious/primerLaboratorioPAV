@@ -13,7 +13,7 @@ public:
     std::string getAutor();
     int getCantPaginas();
     void setAutor(std::string autor);
-    void setCantPAginas(int cantPaginas);
+    void setCantPaginas(int cantPaginas);
     Libro();
     Libro(std::string autor, int cantPaginas);
     ~Libro();
