@@ -77,3 +77,22 @@ int main()
 DTMaterial **verPrestamosAntesDeFecha(std::string ci, DTFecha *fecha, int &cantPrestamos)
 {
 }
+
+bool esPrestamoAnterioraFecha(DTFecha *fechaPrestamo, DTFecha *fecha)
+{
+    if (fechaPrestamo->getAnio() > fecha->getAnio())
+        return false;
+    else if (fechaPrestamo->getAnio() < fecha->getAnio())
+        return true;
+    else
+    {
+        if (fechaPrestamo->getMes() > fecha->getMes())
+            return false;
+        else if (fechaPrestamo->getMes() < fecha->getMes())
+            return true;
+        else
+        {
+            return fechaPrestamo->getDia() < fecha->getDia();
+        }
+    }
+}
