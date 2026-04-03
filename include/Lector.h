@@ -19,6 +19,7 @@ public:
     int getCi();
     std::string getNombre();
     DTFecha getFecha();
+    void agregarPrestamo(Prestamo * prestamo);
     ~Lector();
 };
 #endif

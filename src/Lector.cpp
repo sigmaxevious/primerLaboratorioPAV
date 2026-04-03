@@ -22,3 +22,11 @@ Lector::Lector(int ci, std::string nombre, DTFecha fechaNacimiento)
         this->prestamos[i] = nullptr;
     }
 }
+void Lector::agregarPrestamo (Prestamo * prestamo ) {
+    for (int i =0; i<10; i++) {
+        if (this->prestamos[i] == nullptr) {
+            this->prestamos[i] = prestamo;
+            break;
+        }
+    }
+}
