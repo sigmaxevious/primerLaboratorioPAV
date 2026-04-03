@@ -2,8 +2,16 @@
 #include <string>
 #define MAX_LECTORES 50
 
-enum Menu {
-    ing_opcion, reg_lector, ag_prestamo, obt_mats, cons_multa, ver_prestamos, ag_material, salir
+enum Menu
+{
+    ing_opcion,
+    reg_lector,
+    ag_prestamo,
+    obt_mats,
+    cons_multa,
+    ver_prestamos,
+    ag_material,
+    salir
 };
 
 // -- FUNCIONES --
@@ -23,7 +31,7 @@ int main () {
     std::cout << "6) Agregar materiales" << "\n";
     std::cout << "7) Salir" << "\n";
 
-    if (!(std::cin >> opcionUser)) 
+    if (!(std::cin >> opcionUser))
     {
         std::cerr << "Opcion inválida";
         return 1;
@@ -74,4 +82,27 @@ int main () {
     }
 
     return 1;
+}
+
+DTMaterial **verPrestamosAntesDeFecha(std::string ci, DTFecha *fecha, int &cantPrestamos)
+{
+}
+
+bool esPrestamoAnterioraFecha(DTFecha *fechaPrestamo, DTFecha *fecha)
+{
+    if (fechaPrestamo->getAnio() > fecha->getAnio())
+        return false;
+    else if (fechaPrestamo->getAnio() < fecha->getAnio())
+        return true;
+    else
+    {
+        if (fechaPrestamo->getMes() > fecha->getMes())
+            return false;
+        else if (fechaPrestamo->getMes() < fecha->getMes())
+            return true;
+        else
+        {
+            return fechaPrestamo->getDia() < fecha->getDia();
+        }
+    }
 }

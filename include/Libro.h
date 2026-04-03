@@ -1,20 +1,21 @@
 #ifndef LIBRO_H
 #define LIBRO_H
 #include "Material.h"
+#include <string>
 
 class Libro : public Material
 {
 private:
-    char *autor;
+    std::string autor;
     int cantPaginas;
 
 public:
-    char *getAutor();
+    std::string getAutor();
     int getCantPaginas();
-    void setAutor(char *autor);
-    void setCantPAginas(int cantPaginas);
+    void setAutor(std::string autor);
+    void setCantPaginas(int cantPaginas);
     Libro();
-    Libro(char *autor, int cantPaginas);
+    Libro(std::string autor, int cantPaginas);
     ~Libro();
     float calcularMulta(int diasAtraso) override;
 };

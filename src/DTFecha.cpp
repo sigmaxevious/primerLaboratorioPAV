@@ -5,15 +5,16 @@ DTFecha::DTFecha() {
     mes = 1;
     año = 1900;
 }
-DTFecha::DTFecha(int dia, int mes, int año) {
+DTFecha::DTFecha(int dia, int mes, int anio)
+{
     this->dia = dia;
     this->mes = mes;
-    this->año = año;
+    this->anio = anio;
 }
 DTFecha::DTFecha(const DTFecha &c) {
     this->dia = c.dia;
     this->mes = c.mes;
-    this->año = c.año;
+    this->anio = c.anio;
 }
 int DTFecha::getDia() const {
     return dia;
@@ -39,5 +40,6 @@ bool DTFecha::esmenorFecha(DTFecha fechaComparada, DTFecha fecha2) {
     }
     return false;
 }
-DTFecha::~DTFecha() {
+DTFecha::~DTFecha()
+{
 }

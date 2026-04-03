@@ -1,3 +1,5 @@
+#ifndef LECTOR_H
+#define LECTOR_H
 #include "Prestamo.h"
 #include <string>
 #include "DTFecha.h"
@@ -10,13 +12,14 @@ class Lector {
         Prestamo* prestamos[10];
         int cantidadPrestamos;
 
-    public:
+public:
     Lector();
-    Lector(int ci, string nombre, DTFecha fechaRegistro);
+    Lector(int ci, std::string nombre, DTFecha fechaNacimiento);
     Lector(Lector &c);
     int getCi();
-    string getNombre();
+    std::string getNombre();
     DTFecha getFecha();
     void addPrestamo(Prestamo* prestamo);
     ~Lector();
-}
+};
+#endif

@@ -1,6 +1,8 @@
 #include "Lector.h"
+#include <string>
 
-Lector::Lector() {
+Lector::Lector()
+{
     this->ci = 0;
     this->nombre = "";
     this->fechaRegistro = DTFecha();

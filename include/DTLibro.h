@@ -1,13 +1,15 @@
 #ifndef DTLIBRO_H
 #define DTLIBRO_H
+#include <string>
 
 class DTLibro
 {
 public:
-    char *autor;
+    std::string autor;
     int cantPaginas;
     DTLibro();
-    DTLibro(char *autor, int cantPaginas);
+    DTLibro(std::string autor, int cantPaginas);
+    DTLibro(DTLibro &c);
     ~DTLibro();
 };
 #endif

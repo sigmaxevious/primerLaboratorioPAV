@@ -8,6 +8,7 @@ public:
     bool esMensual;
     DTRevista();
     DTRevista(int numeroEdicion, bool esMensual);
+    DTRevista(DTRevista &c);
     ~DTRevista();
 };
 #endif

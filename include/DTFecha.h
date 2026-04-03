@@ -1,3 +1,5 @@
+#ifndef DTFECHA_H
+#define DTFECHA_H
 
 class DTFecha{
     private:
