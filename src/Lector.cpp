@@ -1,4 +1,4 @@
-#include "Lector.h"
+#include "../include/Lector.h"
 #include <string>
 
 Lector::Lector()
@@ -41,7 +41,9 @@ string Lector::getNombre() const  {
 DTFecha Lector::getFecha() const {
     return this->fechaRegistro;
 }
-
+int Lector::getCantidadPrestamos() const {
+    return this->cantidadPrestamos;
+}
 void Lector::addPrestamo(Prestamo* prestamo) {
     if (cantidadPrestamos < 10) {
         prestamos[cantidadPrestamos] = prestamo;

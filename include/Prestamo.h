@@ -13,8 +13,9 @@ public:
     Prestamo();
     Prestamo(Material *material, int diasPermitidos, DTFecha fechaPrestamo);
     Prestamo(Prestamo &c);
-    int getDíasPermitidos();
+    int getDiasPermitidos();
     DTFecha getFechaPrestamo();
     Material getMaterialPrestado();
+    ~Prestamo();
 };
 #endif

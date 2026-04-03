@@ -13,11 +13,51 @@ enum Menu
     ag_material,
     salir
 };
+int topeLectores = 0;
+Lector lectores[MAX_LECTORES];
 
 // -- FUNCIONES --
-void registrarLector(int ci, string nombre, DTFecha fechaRegistro);
-void agregarPrestamo(int ciLector, Material* material, int diasPermitidos, DTFecha fechaPrestamo);
-DTMaterial* obtenerMaterialesPrestados(int ciLector);
+void registrarLector(int ci, string nombre, DTFecha fechaRegistro){
+    if (topeLectores < MAX_LECTORES) {
+        lectores[topeLectores] = new Lector(ci, nombre, fechaRegistro);
+        topeLectores++;
+    } else {
+        std::cout << "No se pueden registrar más lectores. Capacidad máxima alcanzada." << std::endl;
+    }
+}
+void agregarPrestamo(int ciLector, Material* material, int diasPermitidos, DTFecha fechaPrestamo){
+    if (topeLectores == 0) {
+        std::cout << "No hay lectores registrados. Por favor, registre un lector antes de agregar un préstamo." << std::endl;
+        return;
+    }   
+    if Lector* lector = buscarLectorPorCI(ciLector) {
+        Prestamo* nuevoPrestamo = new Prestamo(material, diasPermitidos, fechaPrestamo);
+        lector->addPrestamo(nuevoPrestamo);
+    } else {
+        std::cout << "Lector con CI " << ciLector << " no encontrado. Por favor, registre el lector antes de agregar un préstamo." << std::endl;
+    }
+}
+DTMaterial* obtenerMaterialesPrestados(int ciLector){
+    Lector* lector = buscarLectorPorCI(ciLector);
+    if (lector) {
+        for(int i = 0; i < lector->getCantidadPrestamos(); i++) {
+            Prestamo* prestamo = lector->getPrestamos()[i];
+            Material materialPrestado = prestamo->getMaterialPrestado();
+            std::cout << "Material prestado: " << materialPrestado.getTitulo() << std::endl;
+        }
+    } else {
+        std::cout << "Lector con CI " << ciLector << " no encontrado." << std::endl;
+        return nullptr;
+    }
+}
+Lector* buscarLectorPorCI(string ci) {
+    for (int i = 0; i < topeLectores; i++) {
+        if (lectores[i]->getCi() == ci) {
+            return lectores[i]; // Se encontró el lector
+        }
+    }
+    return nullptr; // No se encontró
+}
 
 int main () {
     int opcionUser;
