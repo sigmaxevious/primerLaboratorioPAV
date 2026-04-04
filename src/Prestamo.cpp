@@ -5,7 +5,6 @@ Prestamo::Prestamo()
     this->material = nullptr;
     this->fechaPrestamo = DTFecha();
     this->diasPermitidos = 0;
-
 }
 Prestamo::Prestamo(Material *material, int diasPermitidos, DTFecha fechaPrestamo)
 {
@@ -31,11 +30,9 @@ DTFecha Prestamo::getFechaPrestamo()
     return fechaPrestamo;
 }
 
-Material* Prestamo::getMaterialPrestado()
+Material *Prestamo::getMaterialPrestado()
 {
     return material;
 }
 
-Prestamo::~Prestamo() {
-    delete material;
-}
+Prestamo::~Prestamo() {}
