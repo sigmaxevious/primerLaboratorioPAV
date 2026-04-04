@@ -12,5 +12,6 @@ public:
     DTLibro(std::string autor, int cantPaginas);
     DTLibro(DTLibro &c);
     ~DTLibro();
+    void imprimirInfo() const override;
 };
 #endif

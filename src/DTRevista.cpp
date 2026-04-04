@@ -1,5 +1,5 @@
 #include "../include/DTRevista.h"
-#include <string>
+#include <iostream>
 
 DTRevista::DTRevista()
 {
@@ -20,3 +20,12 @@ DTRevista::DTRevista(DTRevista &c)
 }
 
 DTRevista::~DTRevista() {}
+
+void DTRevista::imprimirInfo() const {
+    std::cout << "--- REVISTA ---\n";
+    std::cout << "Código: " << codigo << "\n";
+    std::cout << "Título: " << titulo << "\n";
+    std::cout << "Año: " << anioPublicacion << "\n";
+    std::cout << "Edición: " << numeroEdicion << "\n";
+    std::cout << "Es mensual: " << (esMensual ? "Sí" : "No") << "\n";
+}

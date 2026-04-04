@@ -14,7 +14,7 @@ class DTFecha{
         int getMes() const;
         int getAnio() const;
         // Compara la primera fecha con la segunda, devuelve true si la primera es menor a la segunda, false en caso contrario
-        bool esmenorFecha(DTFecha fechaComparada, DTFecha fecha2);
+        bool esAnterior(const DTFecha &otra) const;
         ~DTFecha();
 };
 #endif

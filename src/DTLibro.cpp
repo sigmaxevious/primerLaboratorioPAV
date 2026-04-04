@@ -1,5 +1,6 @@
 #include "../include/DTLibro.h"
 #include <string>
+#include <iostream>
 
 DTLibro::DTLibro()
 {
@@ -20,3 +21,12 @@ DTLibro::DTLibro(DTLibro &c)
 }
 
 DTLibro::~DTLibro() {}
+
+void DTLibro::imprimirInfo() const {
+    std::cout << "--- LIBRO ---\n";
+    std::cout << "Código: " << codigo << "\n";
+    std::cout << "Título: " << titulo << "\n";
+    std::cout << "Año: " << anioPublicacion << "\n";
+    std::cout << "Autor: " << autor << "\n";
+    std::cout << "Páginas: " << cantPaginas << "\n";
+}
