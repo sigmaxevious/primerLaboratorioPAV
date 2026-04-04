@@ -14,7 +14,7 @@ DTLibro::DTLibro(std::string autor, int cantPaginas)
     this->cantPaginas = cantPaginas;
 }
 
-DTLibro::DTLibro(DTLibro &c)
+DTLibro::DTLibro(DTLibro &c) : DTMaterial(c)
 {
     this->autor = c.autor;
     this->cantPaginas = c.cantPaginas;
@@ -22,7 +22,8 @@ DTLibro::DTLibro(DTLibro &c)
 
 DTLibro::~DTLibro() {}
 
-void DTLibro::imprimirInfo() const {
+void DTLibro::imprimirInfo() const
+{
     std::cout << "--- LIBRO ---\n";
     std::cout << "Código: " << codigo << "\n";
     std::cout << "Título: " << titulo << "\n";

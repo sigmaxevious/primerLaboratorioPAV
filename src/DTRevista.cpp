@@ -13,7 +13,7 @@ DTRevista::DTRevista(int numeroEdicion, bool esMensual)
     this->esMensual = esMensual;
 }
 
-DTRevista::DTRevista(DTRevista &c)
+DTRevista::DTRevista(DTRevista &c) : DTMaterial(c)
 {
     this->numeroEdicion = c.numeroEdicion;
     this->esMensual = c.esMensual;
@@ -21,7 +21,8 @@ DTRevista::DTRevista(DTRevista &c)
 
 DTRevista::~DTRevista() {}
 
-void DTRevista::imprimirInfo() const {
+void DTRevista::imprimirInfo() const
+{
     std::cout << "--- REVISTA ---\n";
     std::cout << "Código: " << codigo << "\n";
     std::cout << "Título: " << titulo << "\n";
