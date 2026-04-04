@@ -75,8 +75,6 @@ int obtenerHoy()
     return (hoy->tm_year + 1900) * 365 + (hoy->tm_mon + 1) * 30 + hoy->tm_mday;
 }
 
-// -- MAIN LOGIC FUNCTIONS --
-
 void registrarLector(string ci, string nombre, DTFecha *fechaRegistro)
 {
     if (topeLectores >= MAX_LECTORES)
@@ -99,11 +97,13 @@ void agregarPrestamo(string ciLector, string codigoMat, int diasPermitidos,
     Lector *lector = buscarLectorPorCI(ciLector);
     if (lector == nullptr)
     {
+        delete fechaPrestamo;
         throw std::invalid_argument("El lector no existe en el sistema.");
     }
     Material *material = buscarMaterialPorCodigo(codigoMat);
     if (material == nullptr)
     {
+        delete fechaPrestamo;
         throw std::invalid_argument("El material no existe en el sistema.");
     }
 
@@ -279,103 +279,8 @@ DTMaterial **verPrestamosAntesDeFecha(std::string ci, DTFecha *fecha, int &cantP
     return resultado;
 }
 
-void cargarDatosPrueba()
-{
-    try
-    {
-        // =========================
-        // 📚 MATERIALES
-        // =========================
-        DTLibro *l1 = new DTLibro("Autor A", 200);
-        l1->codigo = "L1";
-        l1->titulo = "C++ Básico";
-        l1->anioPublicacion = 2020;
-
-        DTLibro *l2 = new DTLibro("Autor B", 350);
-        l2->codigo = "L2";
-        l2->titulo = "POO Avanzado";
-        l2->anioPublicacion = 2018;
-
-        DTLibro *l3 = new DTLibro("Autor C", 150);
-        l3->codigo = "L3";
-        l3->titulo = "Algoritmos";
-        l3->anioPublicacion = 2021;
-
-        DTRevista *r1 = new DTRevista(1, true);
-        r1->codigo = "R1";
-        r1->titulo = "Tech Monthly";
-        r1->anioPublicacion = 2023;
-
-        DTRevista *r2 = new DTRevista(5, false);
-        r2->codigo = "R2";
-        r2->titulo = "Science Weekly";
-        r2->anioPublicacion = 2022;
-
-        DTRevista *r3 = new DTRevista(12, true);
-        r3->codigo = "R3";
-        r3->titulo = "AI Today";
-        r3->anioPublicacion = 2024;
-
-        agregarMaterial(l1);
-        agregarMaterial(l2);
-        agregarMaterial(l3);
-        agregarMaterial(r1);
-        agregarMaterial(r2);
-        agregarMaterial(r3);
-
-        delete l1;
-        delete l2;
-        delete l3;
-        delete r1;
-        delete r2;
-        delete r3;
-
-        // =========================
-        // 👤 LECTORES
-        // =========================
-        registrarLector("111", "Juan Perez", new DTFecha(1, 1, 2022));
-        registrarLector("222", "Maria Lopez", new DTFecha(5, 5, 2021));
-        registrarLector("333", "Carlos Diaz", new DTFecha(10, 10, 2020));
-
-        // =========================
-        // 📅 PRÉSTAMOS (6 cada uno)
-        // =========================
-
-        // --- Juan (111)
-        agregarPrestamo("111", "L1", 5, new DTFecha(1, 3, 2024));
-        agregarPrestamo("111", "R1", 7, new DTFecha(5, 3, 2024));
-        agregarPrestamo("111", "L2", 10, new DTFecha(10, 2, 2024));
-        agregarPrestamo("111", "R2", 3, new DTFecha(15, 1, 2024));
-        agregarPrestamo("111", "L3", 8, new DTFecha(20, 3, 2024));
-        agregarPrestamo("111", "R3", 6, new DTFecha(25, 3, 2024));
-
-        // --- Maria (222)
-        agregarPrestamo("222", "L2", 4, new DTFecha(1, 1, 2023));
-        agregarPrestamo("222", "R2", 6, new DTFecha(10, 2, 2023));
-        agregarPrestamo("222", "L1", 7, new DTFecha(15, 3, 2023));
-        agregarPrestamo("222", "R1", 5, new DTFecha(20, 4, 2023));
-        agregarPrestamo("222", "L3", 9, new DTFecha(25, 5, 2023));
-        agregarPrestamo("222", "R3", 2, new DTFecha(30, 6, 2023));
-
-        // --- Carlos (333)
-        agregarPrestamo("333", "R3", 5, new DTFecha(1, 7, 2022));
-        agregarPrestamo("333", "L3", 6, new DTFecha(10, 8, 2022));
-        agregarPrestamo("333", "R1", 7, new DTFecha(15, 9, 2022));
-        agregarPrestamo("333", "L1", 3, new DTFecha(20, 10, 2022));
-        agregarPrestamo("333", "R2", 4, new DTFecha(25, 11, 2022));
-        agregarPrestamo("333", "L2", 8, new DTFecha(30, 12, 2022));
-
-        std::cout << "Datos de prueba cargados correctamente.\n";
-    }
-    catch (const std::exception &e)
-    {
-        std::cerr << "Error cargando datos: " << e.what() << std::endl;
-    }
-}
-
 int main()
 {
-    cargarDatosPrueba();
     int opcionUser = -1;
     bool salirSistema = false;
 
