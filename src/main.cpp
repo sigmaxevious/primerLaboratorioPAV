@@ -69,74 +69,66 @@ Lector* buscarLectorPorCI(string ci) {
     return nullptr; // No se encontró
 }
 
-int main () {
-    int opcionUser;
+int main() {
+    int opcionUser = -1; // Inicializar para entrar al bucle
+    bool salirSistema = false;
 
-    std::cout << "Para continuar por favor elije una opción:" << "\n";
-    std::cout << "1) Registrar un lector" << "\n";
-    std::cout << "2) Agregar un préstamo" << "\n";
-    std::cout << "3) Obtener materiales prestados" << "\n";
-    std::cout << "4) Consultar multa" << "\n";
-    std::cout << "5) Ver préstamos" << "\n";
-    std::cout << "6) Agregar materiales" << "\n";
-    std::cout << "7) Salir" << "\n";
+    while (!salirSistema) {
+        // 1. Mostrar el menú completo aquí adentro para que se repita
+        std::cout << "\n--- BIBLIOTECA ---" << std::endl;
+        std::cout << "1) Registrar un lector" << std::endl;
+        std::cout << "2) Agregar un préstamo" << std::endl;
+        std::cout << "3) Obtener materiales prestados" << std::endl;
+        std::cout << "4) Consultar multa de material" << std::endl;
+        std::cout << "5) Ver préstamos antes de fecha" << std::endl;
+        std::cout << "6) Agregar material" << std::endl;
+        std::cout << "7) Salir" << std::endl;
+        std::cout << "Opción: ";
 
-    if (!(std::cin >> opcionUser))
-    {
-        std::cerr << "Opcion inválida";
-        return 1;
-    }
+        if (!(std::cin >> opcionUser)) {
+            std::cerr << "Entrada inválida" << std::endl;
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
+            continue;
+        }
 
-    Menu opc = static_cast<Menu>(opcionUser);
-    switch (opc) {
-        case 1:
-            {
-                std::cout << "Registrar un lector" << std::endl;
-                std::cout << "Ingrese nombre del lector: ";
-                std::string nombreLector, ciLector;
-                std::fflush(stdin); // Limpiar el buffer si vienes de leer un int
-                std::getline(std::cin, nombreLector); 
-                std::cout << "Ingrese la CI: ";
-                std::cin >> ciLector;
-                std::cout << "Ingrese la fecha de registro (dd mm aaaa): ";
-                int dia, mes, anio;
-                std::cin >> dia >> mes >> anio;
-                DTFecha* fechaActual = new DTFecha(dia, mes, anio);
-                registrarLector(ciLector, nombreLector, fechaActual);
-                break;
+        Menu opc = static_cast<Menu>(opcionUser);
+
+        try {
+            switch (opc) {
+                case reg_lector: { // Usa los nombres del Enum
+                    std::cout << "Registrar un lector" << std::endl;
+                    std::string nombreLector, ciLector;
+                    
+                    std::cin.ignore(); // LIMPIEZA CLAVE antes de getline
+                    std::cout << "Ingrese nombre: ";
+                    std::getline(std::cin, nombreLector); 
+                    
+                    std::cout << "Ingrese CI: ";
+                    std::cin >> ciLector;
+                    
+                    std::cout << "Fecha (dd mm aaaa): ";
+                    int d, m, a;
+                    std::cin >> d >> m >> a;
+                    
+                    DTFecha* fechaActual = new DTFecha(d, m, a);
+                    registrarLector(ciLector, nombreLector, fechaActual);
+                    std::cout << "Lector registrado." << std::endl;
+                    break;
+                }
+                case salir:
+                    salirSistema = true;
+                    break;
+                default:
+                    std::cout << "Opción no válida." << std::endl;
+                    break;
             }
-        case 2:
-
-            std::cout << "Ingresaste: " << opc;
-            break;
-        case 3:
-
-            std::cout << "Ingresaste: " << opc;
-            break;
-        case 4:
-
-            std::cout << "Ingresaste: " << opc;
-            break;
-        case 5:
-
-            std::cout << "Ingresaste: " << opc;
-            break;
-        case 6:
-
-            std::cout << "Ingresaste: " << opc;
-            break;
-        case 7:
-
-            std::cout << "Ingresaste: " << opc;
-            break;
-        
-        default:
-
-            std::cout << "Ingresaste: " << opc;
-            break;
+        } catch (const std::invalid_argument& e) {
+            // Aquí atrapas los errores de CI no encontrada, etc. [4]
+            std::cerr << "ERROR: " << e.what() << std::endl;
+        }
     }
-
-    return 1;
+    return 0; // 0 indica éxito
 }
 
 DTMaterial **verPrestamosAntesDeFecha(std::string ci, DTFecha *fecha, int &cantPrestamos)
