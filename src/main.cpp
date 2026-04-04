@@ -287,261 +287,262 @@ bool esPrestamoAnterioraFecha(DTFecha *fechaPrestamo, DTFecha *fecha)
             return fechaPrestamo->getDia() < fecha->getDia();
         }
     }
+}
 
-    int main()
+int main()
+{
+    int opcionUser = -1;
+    bool salirSistema = false;
+
+    while (!salirSistema)
     {
-        int opcionUser = -1;
-        bool salirSistema = false;
+        std::cout << "\n--- BIBLIOTECA ---\n";
+        std::cout << "1) Registrar un lector\n";
+        std::cout << "2) Agregar un préstamo\n";
+        std::cout << "3) Obtener materiales prestados\n";
+        std::cout << "4) Consultar multa de material\n";
+        std::cout << "5) Ver préstamos antes de fecha\n";
+        std::cout << "6) Agregar material\n";
+        std::cout << "7) Salir\n";
+        std::cout << "Opción: ";
 
-        while (!salirSistema)
+        if (!(std::cin >> opcionUser))
         {
-            std::cout << "\n--- BIBLIOTECA ---\n";
-            std::cout << "1) Registrar un lector\n";
-            std::cout << "2) Agregar un préstamo\n";
-            std::cout << "3) Obtener materiales prestados\n";
-            std::cout << "4) Consultar multa de material\n";
-            std::cout << "5) Ver préstamos antes de fecha\n";
-            std::cout << "6) Agregar material\n";
-            std::cout << "7) Salir\n";
-            std::cout << "Opción: ";
-
-            if (!(std::cin >> opcionUser))
-            {
-                std::cerr << "Entrada inválida\n";
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                continue;
-            }
-
-            Menu opc = static_cast<Menu>(opcionUser);
-
-            try
-            {
-                switch (opc)
-                {
-                case reg_lector:
-                {
-                    std::string nombreLector, ciLector;
-                    std::cin.ignore();
-                    std::cout << "Ingrese nombre: ";
-                    std::getline(std::cin, nombreLector);
-                    if (nombreLector.empty())
-                        throw std::invalid_argument("El nombre no puede estar vacío.");
-
-                    std::cout << "Ingrese CI: ";
-                    std::cin >> ciLector;
-
-                    std::cout << "Fecha registro (dd mm aaaa): ";
-                    int d, m, a;
-                    if (!(std::cin >> d >> m >> a))
-                    {
-                        throw std::invalid_argument("Formato de fecha inválido.");
-                    }
-
-                    DTFecha *fechaRegistro = new DTFecha(d, m, a);
-                    registrarLector(ciLector, nombreLector, fechaRegistro);
-                    std::cout << "Lector registrado éxitosamente.\n";
-                    break;
-                }
-                case ag_prestamo:
-                {
-                    std::cout << "Ingrese CI del lector: ";
-                    std::string ciLector;
-                    std::cin >> ciLector;
-
-                    std::cout << "Ingrese código de material: ";
-                    std::string codigoMat;
-                    std::cin >> codigoMat;
-
-                    std::cout << "Días permitidos: ";
-                    int dias;
-                    if (!(std::cin >> dias) || dias <= 0)
-                    {
-                        throw std::invalid_argument("Días inválidos.");
-                    }
-
-                    std::cout << "Fecha préstamo (dd mm aaaa): ";
-                    int d, m, a;
-                    if (!(std::cin >> d >> m >> a))
-                    {
-                        throw std::invalid_argument("Formato de fecha inválido.");
-                    }
-
-                    DTFecha *fechaPrestamo = new DTFecha(d, m, a);
-                    agregarPrestamo(ciLector, codigoMat, dias, fechaPrestamo);
-                    std::cout << "Préstamo agregado éxitosamente.\n";
-                    break;
-                }
-                case obt_mats:
-                {
-                    std::cout << "Ingrese CI del lector: ";
-                    std::string ciLector;
-                    std::cin >> ciLector;
-
-                    int cant = 0;
-                    DTMaterial **mPrestados = obtenerMaterialesPrestados(ciLector, cant);
-
-                    if (cant == 0 || mPrestados == nullptr)
-                    {
-                        std::cout << "El lector no tiene materiales prestados.\n";
-                    }
-                    else
-                    {
-                        std::cout << "Materiales prestados al lector:\n";
-                        for (int i = 0; i < cant; i++)
-                        {
-                            mPrestados[i]->imprimirInfo();
-                            delete mPrestados[i];
-                        }
-                        delete[] mPrestados;
-                    }
-                    break;
-                }
-                case cons_multa:
-                {
-                    std::cout << "Ingrese CI del lector: ";
-                    std::string ciLector;
-                    std::cin >> ciLector;
-
-                    std::cout << "Ingrese código de material: ";
-                    std::string codigoMat;
-                    std::cin >> codigoMat;
-
-                    float multa = consultarMultaMaterial(codigoMat, ciLector);
-                    if (multa == 0)
-                    {
-                        std::cout << "El material no tiene atraso.\n";
-                    }
-                    else
-                    {
-                        std::cout << "Multa generada: $" << multa << "\n";
-                    }
-                    break;
-                }
-                case ver_prestamos:
-                {
-                    std::cout << "Ingrese CI del lector: ";
-                    std::string ciLector;
-                    std::cin >> ciLector;
-
-                    std::cout << "Ingrese fecha límite (dd mm aaaa): ";
-                    int d, m, a;
-                    if (!(std::cin >> d >> m >> a))
-                    {
-                        throw std::invalid_argument("Formato de fecha inválido.");
-                    }
-
-                    DTFecha fechaLimite(d, m, a);
-                    int cant = 0;
-                    DTMaterial **mPrestados =
-                        verPrestamosAntesDeFecha(ciLector, &fechaLimite, cant);
-
-                    if (cant == 0 || mPrestados == nullptr)
-                    {
-                        std::cout << "No hay préstamos anteriores a esta fecha.\n";
-                    }
-                    else
-                    {
-                        std::cout << "Préstamos antes de fecha:\n";
-                        for (int i = 0; i < cant; i++)
-                        {
-                            mPrestados[i]->imprimirInfo();
-                            delete mPrestados[i];
-                        }
-                        delete[] mPrestados;
-                    }
-                    break;
-                }
-                case ag_material:
-                {
-                    std::cout << "Tipo de material (1=Libro, 2=Revista): ";
-                    int tipo;
-                    if (!(std::cin >> tipo) || (tipo != 1 && tipo != 2))
-                    {
-                        throw std::invalid_argument("Tipo inválido.");
-                    }
-
-                    std::cout << "Código: ";
-                    std::string codigo;
-                    std::cin >> codigo;
-
-                    std::cin.ignore();
-                    std::cout << "Título: ";
-                    std::string titulo;
-                    std::getline(std::cin, titulo);
-
-                    std::cout << "Año: ";
-                    int anio;
-                    std::cin >> anio;
-
-                    DTMaterial *dtNuevo = nullptr;
-
-                    std::cin.ignore();
-                    if (tipo == 1)
-                    { // Libro
-                        std::cout << "Autor: ";
-                        std::string autor;
-                        std::getline(std::cin, autor);
-
-                        std::cout << "Páginas: ";
-                        int pags;
-                        std::cin >> pags;
-
-                        DTLibro *dtL = new DTLibro(autor, pags);
-                        dtL->codigo = codigo;
-                        dtL->titulo = titulo;
-                        dtL->anioPublicacion = anio;
-                        dtNuevo = dtL;
-                    }
-                    else
-                    { // Revista
-                        std::cout << "Edición: ";
-                        int edicion;
-                        std::cin >> edicion;
-
-                        std::cout << "¿Es mensual? (1=Sí, 0=No): ";
-                        int esMensualInt;
-                        std::cin >> esMensualInt;
-                        bool esMensual = (esMensualInt != 0);
-
-                        DTRevista *dtR = new DTRevista(edicion, esMensual);
-                        dtR->codigo = codigo;
-                        dtR->titulo = titulo;
-                        dtR->anioPublicacion = anio;
-                        dtNuevo = dtR;
-                    }
-
-                    agregarMaterial(dtNuevo);
-                    delete dtNuevo;
-                    std::cout << "Material agregado éxitosamente.\n";
-                    break;
-                }
-                case salir:
-                    salirSistema = true;
-                    std::cout << "Saliendo...\n";
-                    break;
-                default:
-                    std::cout << "Opción no válida.\n";
-                    break;
-                }
-            }
-            catch (const std::invalid_argument &e)
-            {
-                std::cerr << "ERROR: " << e.what() << std::endl;
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            }
+            std::cerr << "Entrada inválida\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            continue;
         }
 
-        // Limpieza de memoria global
-        for (int i = 0; i < topeLectores; i++)
-        {
-            delete lectores[i];
-        }
-        for (int i = 0; i < topeMateriales; i++)
-        {
-            delete materiales[i];
-        }
+        Menu opc = static_cast<Menu>(opcionUser);
 
-        return 0;
+        try
+        {
+            switch (opc)
+            {
+            case reg_lector:
+            {
+                std::string nombreLector, ciLector;
+                std::cin.ignore();
+                std::cout << "Ingrese nombre: ";
+                std::getline(std::cin, nombreLector);
+                if (nombreLector.empty())
+                    throw std::invalid_argument("El nombre no puede estar vacío.");
+
+                std::cout << "Ingrese CI: ";
+                std::cin >> ciLector;
+
+                std::cout << "Fecha registro (dd mm aaaa): ";
+                int d, m, a;
+                if (!(std::cin >> d >> m >> a))
+                {
+                    throw std::invalid_argument("Formato de fecha inválido.");
+                }
+
+                DTFecha *fechaRegistro = new DTFecha(d, m, a);
+                registrarLector(ciLector, nombreLector, fechaRegistro);
+                std::cout << "Lector registrado éxitosamente.\n";
+                break;
+            }
+            case ag_prestamo:
+            {
+                std::cout << "Ingrese CI del lector: ";
+                std::string ciLector;
+                std::cin >> ciLector;
+
+                std::cout << "Ingrese código de material: ";
+                std::string codigoMat;
+                std::cin >> codigoMat;
+
+                std::cout << "Días permitidos: ";
+                int dias;
+                if (!(std::cin >> dias) || dias <= 0)
+                {
+                    throw std::invalid_argument("Días inválidos.");
+                }
+
+                std::cout << "Fecha préstamo (dd mm aaaa): ";
+                int d, m, a;
+                if (!(std::cin >> d >> m >> a))
+                {
+                    throw std::invalid_argument("Formato de fecha inválido.");
+                }
+
+                DTFecha *fechaPrestamo = new DTFecha(d, m, a);
+                agregarPrestamo(ciLector, codigoMat, dias, fechaPrestamo);
+                std::cout << "Préstamo agregado éxitosamente.\n";
+                break;
+            }
+            case obt_mats:
+            {
+                std::cout << "Ingrese CI del lector: ";
+                std::string ciLector;
+                std::cin >> ciLector;
+
+                int cant = 0;
+                DTMaterial **mPrestados = obtenerMaterialesPrestados(ciLector, cant);
+
+                if (cant == 0 || mPrestados == nullptr)
+                {
+                    std::cout << "El lector no tiene materiales prestados.\n";
+                }
+                else
+                {
+                    std::cout << "Materiales prestados al lector:\n";
+                    for (int i = 0; i < cant; i++)
+                    {
+                        mPrestados[i]->imprimirInfo();
+                        delete mPrestados[i];
+                    }
+                    delete[] mPrestados;
+                }
+                break;
+            }
+            case cons_multa:
+            {
+                std::cout << "Ingrese CI del lector: ";
+                std::string ciLector;
+                std::cin >> ciLector;
+
+                std::cout << "Ingrese código de material: ";
+                std::string codigoMat;
+                std::cin >> codigoMat;
+
+                float multa = consultarMultaMaterial(codigoMat, ciLector);
+                if (multa == 0)
+                {
+                    std::cout << "El material no tiene atraso.\n";
+                }
+                else
+                {
+                    std::cout << "Multa generada: $" << multa << "\n";
+                }
+                break;
+            }
+            case ver_prestamos:
+            {
+                std::cout << "Ingrese CI del lector: ";
+                std::string ciLector;
+                std::cin >> ciLector;
+
+                std::cout << "Ingrese fecha límite (dd mm aaaa): ";
+                int d, m, a;
+                if (!(std::cin >> d >> m >> a))
+                {
+                    throw std::invalid_argument("Formato de fecha inválido.");
+                }
+
+                DTFecha fechaLimite(d, m, a);
+                int cant = 0;
+                DTMaterial **mPrestados =
+                    verPrestamosAntesDeFecha(ciLector, &fechaLimite, cant);
+
+                if (cant == 0 || mPrestados == nullptr)
+                {
+                    std::cout << "No hay préstamos anteriores a esta fecha.\n";
+                }
+                else
+                {
+                    std::cout << "Préstamos antes de fecha:\n";
+                    for (int i = 0; i < cant; i++)
+                    {
+                        mPrestados[i]->imprimirInfo();
+                        delete mPrestados[i];
+                    }
+                    delete[] mPrestados;
+                }
+                break;
+            }
+            case ag_material:
+            {
+                std::cout << "Tipo de material (1=Libro, 2=Revista): ";
+                int tipo;
+                if (!(std::cin >> tipo) || (tipo != 1 && tipo != 2))
+                {
+                    throw std::invalid_argument("Tipo inválido.");
+                }
+
+                std::cout << "Código: ";
+                std::string codigo;
+                std::cin >> codigo;
+
+                std::cin.ignore();
+                std::cout << "Título: ";
+                std::string titulo;
+                std::getline(std::cin, titulo);
+
+                std::cout << "Año: ";
+                int anio;
+                std::cin >> anio;
+
+                DTMaterial *dtNuevo = nullptr;
+
+                std::cin.ignore();
+                if (tipo == 1)
+                { // Libro
+                    std::cout << "Autor: ";
+                    std::string autor;
+                    std::getline(std::cin, autor);
+
+                    std::cout << "Páginas: ";
+                    int pags;
+                    std::cin >> pags;
+
+                    DTLibro *dtL = new DTLibro(autor, pags);
+                    dtL->codigo = codigo;
+                    dtL->titulo = titulo;
+                    dtL->anioPublicacion = anio;
+                    dtNuevo = dtL;
+                }
+                else
+                { // Revista
+                    std::cout << "Edición: ";
+                    int edicion;
+                    std::cin >> edicion;
+
+                    std::cout << "¿Es mensual? (1=Sí, 0=No): ";
+                    int esMensualInt;
+                    std::cin >> esMensualInt;
+                    bool esMensual = (esMensualInt != 0);
+
+                    DTRevista *dtR = new DTRevista(edicion, esMensual);
+                    dtR->codigo = codigo;
+                    dtR->titulo = titulo;
+                    dtR->anioPublicacion = anio;
+                    dtNuevo = dtR;
+                }
+
+                agregarMaterial(dtNuevo);
+                delete dtNuevo;
+                std::cout << "Material agregado éxitosamente.\n";
+                break;
+            }
+            case salir:
+                salirSistema = true;
+                std::cout << "Saliendo...\n";
+                break;
+            default:
+                std::cout << "Opción no válida.\n";
+                break;
+            }
+        }
+        catch (const std::invalid_argument &e)
+        {
+            std::cerr << "ERROR: " << e.what() << std::endl;
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
     }
+
+    // Limpieza de memoria global
+    for (int i = 0; i < topeLectores; i++)
+    {
+        delete lectores[i];
+    }
+    for (int i = 0; i < topeMateriales; i++)
+    {
+        delete materiales[i];
+    }
+
+    return 0;
+}
