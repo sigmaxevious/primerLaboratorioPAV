@@ -11,5 +11,6 @@ public:
     DTRevista(int numeroEdicion, bool esMensual);
     DTRevista(DTRevista &c);
     ~DTRevista();
+    void imprimirInfo() const override;
 };
 #endif

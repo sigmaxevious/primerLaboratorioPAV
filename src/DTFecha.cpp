@@ -26,14 +26,14 @@ int DTFecha::getAnio() const {
     return anio;
 }
 
-bool DTFecha::esmenorFecha(DTFecha fechaComparada, DTFecha fecha2) {
-    if (fechaComparada.anio < fecha2.anio) {
+bool DTFecha::esAnterior(const DTFecha &otra) const {
+    if (this->anio < otra.anio) {
         return true;
-    } else if (fechaComparada.anio == fecha2.anio) {
-        if (fechaComparada.mes < fecha2.mes) {
+    } else if (this->anio == otra.anio) {
+        if (this->mes < otra.mes) {
             return true;
-        } else if (fechaComparada.mes == fecha2.mes) {
-            if (fechaComparada.dia < fecha2.dia) {
+        } else if (this->mes == otra.mes) {
+            if (this->dia < otra.dia) {
                 return true;
             }
         }

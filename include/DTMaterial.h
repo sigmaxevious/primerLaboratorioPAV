@@ -11,6 +11,7 @@ public:
     DTMaterial();
     DTMaterial(std::string codigo, std::string titulo, int anioPublicacion);
     DTMaterial(DTMaterial &c);
-    ~DTMaterial();
+    virtual void imprimirInfo() const = 0;
+    virtual ~DTMaterial();
 };
 #endif
