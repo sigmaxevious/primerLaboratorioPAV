@@ -8,11 +8,14 @@ private:
     std::string codigo;
     std::string titulo;
     int anioPublicacion;
+    int valorMultaPorDia;
 
 public:
     std::string getCodigo();
     std::string getTitulo();
     int getAnioPublicacion();
+    int getValorMultaPorDia();
+    
     void setCodigo(std::string codigo);
     void setTitulo(std::string titulo);
     void setAnioPublicacion(int anioPublicacion);

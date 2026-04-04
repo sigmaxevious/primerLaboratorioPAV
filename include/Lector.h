@@ -20,6 +20,7 @@ public:
     std::string getNombre();
     DTFecha getFecha();
     void agregarPrestamo(Prestamo * prestamo);
+    Prestamo * getPrestamos();
     ~Lector();
 };
 #endif

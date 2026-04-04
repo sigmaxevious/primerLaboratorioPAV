@@ -27,9 +27,12 @@ enum Menu
 int main()
 {
     int opcionUser;
+    Lector * lectores[100];
+    int cantLectores = 0;
+    Material* materiales[100];
+    int cantMateriales = 0;
     while ( opcionUser != 7 ) {
 
-        
         
         std::cout << "Para continuar por favor elije una opción:" << "\n";
         std::cout << "1) Registrar un lector" << "\n"; /// 
@@ -47,10 +50,6 @@ int main()
         }
         
         Menu opc = static_cast<Menu>(opcionUser);
-        Lector * lectores[100];
-        int cantLectores = 0;
-        Material* materiales[100];
-        int cantMateriales = 0;
         
         switch (opc) {
             case 1:
@@ -114,7 +113,6 @@ int main()
                     if (cantMateriales == 0)
                         throw std::invalid_argument("No hay materiales registrados.");
 
-                    // --- Find lector ---
                     std::cout << "Cédula del lector: \n";
                     int ci;
                     if (!(std::cin >> ci)) {
@@ -126,7 +124,6 @@ int main()
                     if (lector == nullptr)
                         throw std::invalid_argument("No existe un lector con esa cédula.");
 
-                    // --- Find material ---
                     std::cout << "Código del material: \n";
                     std::string codigo;
                     std::cin >> codigo;
@@ -141,7 +138,6 @@ int main()
                     if (material == nullptr)
                         throw std::invalid_argument("No existe un material con ese código.");
 
-                    // --- Dias permitidos ---
                     std::cout << "Días permitidos: \n";
                     int dias;
                     if (!(std::cin >> dias)) {
@@ -152,7 +148,6 @@ int main()
                     if (dias <= 0)
                         throw std::invalid_argument("Los días deben ser mayor a 0.");
 
-                    // --- Fecha del prestamo ---
                     std::cout << "Fecha del préstamo: (dd/mm/aaaa) \n";
                     std::string fechaString;
                     std::cin >> fechaString;
@@ -174,14 +169,6 @@ int main()
                     } catch (...) {
                         throw std::invalid_argument("La fecha debe contener solo números.");
                     }
-
-                    if (dia < 1 || dia > 31)
-                        throw std::invalid_argument("Día inválido (1-31).");
-                    if (mes < 1 || mes > 12)
-                        throw std::invalid_argument("Mes inválido (1-12).");
-                    if (year < 1900 || year > 2025)
-                        throw std::invalid_argument("Año inválido (1900-2025).");
-
                     DTFecha fechaPrestamo(dia, mes, year);
                     lector->agregarPrestamo(new Prestamo(material, dias, fechaPrestamo));
                     std::cout << "Préstamo agregado exitosamente.\n";
@@ -196,8 +183,63 @@ int main()
             
             break;
             case 4:
-            
-            break;
+            // --- para consultar la multa se necesita el codigo del material, obtener el valor de la multa y multiplicar por el numero de dias de atraso
+            // --- para obtener el numero de dias de atraso se necesita la fecha del prestamo, la fecha actual y los dias permitidos del prestamo
+            // --- la fecha actual se puede obtener con <ctime>
+            {
+                try {
+                    std::cout << "Código del material: \n";
+                    std::string codigo;
+                    std::cin >> codigo;
+
+                    Material* mat = nullptr;
+                    for (int i = 0; i < cantMateriales; i++) {
+                        if (materiales[i]->getCodigo() == codigo) {
+                            mat = materiales[i];
+                            break;
+                        }
+                    }
+                    if (mat == nullptr)
+                        throw std::invalid_argument("No existe un material con ese código.");
+
+                    std::cout << "Cédula del lector: \n";
+                    int ci;
+                    std::cin >> ci;
+                    Lector* lector = buscarLector(lectores, cantLectores, ci);
+                    if (lector == nullptr)
+                        throw std::invalid_argument("No existe un lector con esa cédula.");
+
+                    // Encontrar el prestamo del material recibido
+                    Prestamo* prestamo = nullptr;
+
+                    while (lector->getPrestamos() != nullptr) {
+                                    Prestamo*p = lector->getPrestamos();
+                                    if (p->getMaterialPrestado().getCodigo() == codigo) {
+                                        prestamo = p;break;
+                                    }
+                                }
+                    if (prestamo == nullptr)
+                        throw std::invalid_argument("El lector no tiene un préstamo de ese material.");
+
+                    int diasFechaPrestamo = fechaADias(prestamo->getFechaPrestamo());
+                    int fechaDevolucion = diasFechaPrestamo + prestamo->getDíasPermitidos();
+                    int hoy = obtenerHoy();
+                    int diasAtraso = hoy - fechaDevolucion;
+
+                    if (diasAtraso <= 0) {
+                        std::cout << "El préstamo está al día, no hay multa.\n";
+                    } else {
+                        float multa = mat->calcularMulta(diasAtraso);
+                        std::cout << "Días de atraso: " << diasAtraso << "\n";
+                        std::cout << "Multa total: $" << multa << "\n";
+                    }
+
+                } catch (const std::invalid_argument& e) {
+                    std::cerr << "Error: " << e.what() << "\n";
+                    continue;
+                }
+                break;
+            }
             case 5:
             
             break;
@@ -321,6 +363,16 @@ Lector* buscarLector(Lector* lectores[], int cant, int ci) {
         if (lectores[i]->getCi() == ci)
             return lectores[i];
     return nullptr;
+}
+
+int fechaADias(DTFecha fecha) {
+    return fecha.getAnio() * 365 + fecha.getMes() * 30 + fecha.getDia();
+}
+
+int obtenerHoy() {
+    time_t t = time(nullptr);
+    tm* hoy = localtime(&t);
+    return (hoy->tm_year + 1900) * 365 + (hoy->tm_mon + 1) * 30 + hoy->tm_mday;
 }
 
 bool esPrestamoAnterioraFecha(DTFecha *fechaPrestamo, DTFecha *fecha)

@@ -30,3 +30,7 @@ void Lector::agregarPrestamo (Prestamo * prestamo ) {
         }
     }
 }
+
+Prestamo * Lector::getPrestamos() {
+    return *prestamos;
+}
