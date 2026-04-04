@@ -1,4 +1,5 @@
 #include "../include/Libro.h"
+#include "../include/DTLibro.h"
 #include <string>
 
 Libro::Libro()
@@ -13,11 +14,7 @@ Libro::Libro(std::string autor, int cantPaginas)
     this->cantPaginas = cantPaginas;
 }
 
-Libro::Libro(Libro &c)
-{
-    this->autor = c.autor;
-    this->cantPaginas = c.cantPaginas;
-}
+
 
 Libro::~Libro() {}
 
@@ -44,4 +41,14 @@ void Libro::setCantPaginas(int cantPaginas)
 float Libro::calcularMulta(int diasAtraso)
 {
     return diasAtraso * 5.0;
+}
+
+DTMaterial* Libro::crearDT() {
+    DTLibro* dtLibro = new DTLibro();
+    dtLibro->autor = this->autor;
+    dtLibro->cantPaginas = this->cantPaginas;
+    dtLibro->codigo = this->getCodigo();
+    dtLibro->titulo = this->getTitulo();
+    dtLibro->anioPublicacion = this->getAnioPublicacion();
+    return dtLibro;
 }

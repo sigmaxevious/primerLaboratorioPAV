@@ -16,4 +16,5 @@ class DTFecha{
         // Compara la primera fecha con la segunda, devuelve true si la primera es menor a la segunda, false en caso contrario
         bool esmenorFecha(DTFecha fechaComparada, DTFecha fecha2);
         ~DTFecha();
-}
+};
+#endif

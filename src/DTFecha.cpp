@@ -3,7 +3,7 @@
 DTFecha::DTFecha() {
     dia = 1;
     mes = 1;
-    año = 1900;
+    anio = 1900;
 }
 DTFecha::DTFecha(int dia, int mes, int anio)
 {

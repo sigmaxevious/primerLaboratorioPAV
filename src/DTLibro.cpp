@@ -18,3 +18,5 @@ DTLibro::DTLibro(DTLibro &c)
     this->autor = c.autor;
     this->cantPaginas = c.cantPaginas;
 }
+
+DTLibro::~DTLibro() {}

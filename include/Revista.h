@@ -17,5 +17,6 @@ public:
     Revista(int numeroEdicion, bool esMensual);
     ~Revista();
     float calcularMulta(int diasAtraso) override;
+    DTMaterial* crearDT() override;
 };
 #endif

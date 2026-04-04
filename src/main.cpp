@@ -1,5 +1,13 @@
 #include <iostream>
 #include <string>
+#include <stdexcept> 
+#include "../include/Lector.h"
+#include "../include/Material.h"
+#include "../include/DTMaterial.h"
+
+using namespace std;
+Lector* buscarLectorPorCI(string ci);
+
 #define MAX_LECTORES 50
 
 enum Menu
@@ -14,48 +22,50 @@ enum Menu
     salir
 };
 int topeLectores = 0;
-Lector lectores[MAX_LECTORES];
+Lector* lectores[MAX_LECTORES];
 
 // -- FUNCIONES --
-void registrarLector(int ci, string nombre, DTFecha fechaRegistro){
+void registrarLector(string ci, string nombre, DTFecha* fechaRegistro){
     if (topeLectores < MAX_LECTORES) {
-        lectores[topeLectores] = new Lector(ci, nombre, fechaRegistro);
+        lectores[topeLectores] = new Lector(ci, nombre, *fechaRegistro);
         topeLectores++;
     } else {
         std::cout << "No se pueden registrar más lectores. Capacidad máxima alcanzada." << std::endl;
     }
 }
-void agregarPrestamo(int ciLector, Material* material, int diasPermitidos, DTFecha fechaPrestamo){
-    if (topeLectores == 0) {
-        std::cout << "No hay lectores registrados. Por favor, registre un lector antes de agregar un préstamo." << std::endl;
-        return;
-    }   
-    if Lector* lector = buscarLectorPorCI(ciLector) {
-        Prestamo* nuevoPrestamo = new Prestamo(material, diasPermitidos, fechaPrestamo);
-        lector->addPrestamo(nuevoPrestamo);
-    } else {
-        std::cout << "Lector con CI " << ciLector << " no encontrado. Por favor, registre el lector antes de agregar un préstamo." << std::endl;
-    }
-}
-DTMaterial* obtenerMaterialesPrestados(int ciLector){
+void agregarPrestamo(string ciLector, Material* material, int diasPermitidos, DTFecha* fechaPrestamo) {
     Lector* lector = buscarLectorPorCI(ciLector);
-    if (lector) {
-        for(int i = 0; i < lector->getCantidadPrestamos(); i++) {
-            Prestamo* prestamo = lector->getPrestamos()[i];
-            Material materialPrestado = prestamo->getMaterialPrestado();
-            std::cout << "Material prestado: " << materialPrestado.getTitulo() << std::endl;
-        }
-    } else {
-        std::cout << "Lector con CI " << ciLector << " no encontrado." << std::endl;
-        return nullptr;
+    if (lector == nullptr) {
+        throw std::invalid_argument("El lector no existe en el sistema."); // Requisito 
     }
+    
+    // Se crea el préstamo y se vincula al lector
+    Prestamo* nuevoPrestamo = new Prestamo(material, diasPermitidos, *fechaPrestamo);
+    lector->addPrestamo(nuevoPrestamo);
+}
+DTMaterial** obtenerMaterialesPrestados(string ciLector, int& cantMateriales) {
+    Lector* lector = buscarLectorPorCI(ciLector);
+    if (lector == nullptr) {
+        throw std::invalid_argument("Lector no encontrado.");
+    }
+
+    cantMateriales = lector->getCantidadPrestamos();
+    
+    DTMaterial** resultado = new DTMaterial*[cantMateriales];
+    
+    for(int i = 0; i < cantMateriales; i++) {
+        Prestamo* p = lector->getPrestamos()[i];
+        Material* m = p->getMaterialPrestado(); // Usar puntero, no el objeto directo
+        resultado[i] = m->crearDT(); 
+    }
+    return resultado;
 }
 Lector* buscarLectorPorCI(string ci) {
     for (int i = 0; i < topeLectores; i++) {
         if (lectores[i]->getCi() == ci) {
             return lectores[i]; // Se encontró el lector
         }
-    }
+    }   
     return nullptr; // No se encontró
 }
 
@@ -80,16 +90,21 @@ int main () {
     Menu opc = static_cast<Menu>(opcionUser);
     switch (opc) {
         case 1:
+            {
                 std::cout << "Registrar un lector" << std::endl;
                 std::cout << "Ingrese nombre del lector: ";
+                std::string nombreLector, ciLector;
                 std::fflush(stdin); // Limpiar el buffer si vienes de leer un int
                 std::getline(std::cin, nombreLector); 
                 std::cout << "Ingrese la CI: ";
                 std::cin >> ciLector;
                 std::cout << "Ingrese la fecha de registro (dd mm aaaa): ";
+                int dia, mes, anio;
                 std::cin >> dia >> mes >> anio;
+                DTFecha* fechaActual = new DTFecha(dia, mes, anio);
                 registrarLector(ciLector, nombreLector, fechaActual);
                 break;
+            }
         case 2:
 
             std::cout << "Ingresaste: " << opc;
@@ -118,7 +133,7 @@ int main () {
         default:
 
             std::cout << "Ingresaste: " << opc;
-            0;
+            break;
     }
 
     return 1;
@@ -126,6 +141,7 @@ int main () {
 
 DTMaterial **verPrestamosAntesDeFecha(std::string ci, DTFecha *fecha, int &cantPrestamos)
 {
+    return nullptr; // Implementación por hacer
 }
 
 bool esPrestamoAnterioraFecha(DTFecha *fechaPrestamo, DTFecha *fecha)

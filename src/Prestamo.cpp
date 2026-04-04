@@ -31,9 +31,9 @@ DTFecha Prestamo::getFechaPrestamo()
     return fechaPrestamo;
 }
 
-Material Prestamo::getMaterialPrestado()
+Material* Prestamo::getMaterialPrestado()
 {
-    return *material;
+    return material;
 }
 
 Prestamo::~Prestamo() {

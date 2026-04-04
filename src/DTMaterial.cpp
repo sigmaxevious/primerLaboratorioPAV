@@ -21,3 +21,5 @@ DTMaterial::DTMaterial(DTMaterial &c)
     this->titulo = c.titulo;
     this->anioPublicacion = c.anioPublicacion;
 }
+
+DTMaterial::~DTMaterial() {}

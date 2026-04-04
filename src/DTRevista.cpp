@@ -18,3 +18,5 @@ DTRevista::DTRevista(DTRevista &c)
     this->numeroEdicion = c.numeroEdicion;
     this->esMensual = c.esMensual;
 }
+
+DTRevista::~DTRevista() {}

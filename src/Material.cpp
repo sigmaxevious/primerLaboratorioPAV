@@ -21,17 +21,17 @@ Material::Material(Material &c)
     this->anioPublicacion = c.anioPublicacion;
 }
 
-std::string Material::getCodigo()
+std::string Material::getCodigo() const
 {
     return codigo;
 }
 
-std::string Material::getTitulo()
+std::string Material::getTitulo() const
 {
     return titulo;
 }
 
-int Material::getAnioPublicacion()
+int Material::getAnioPublicacion() const
 {
     return anioPublicacion;
 }
@@ -49,6 +49,10 @@ void Material::setTitulo(std::string titulo)
 void Material::setAnioPublicacion(int anioPublicacion)
 {
     this->anioPublicacion = anioPublicacion;
+}
+
+DTMaterial* Material::crearDT() {
+    return nullptr; 
 }
 
 Material::~Material() {}

@@ -1,8 +1,9 @@
 #ifndef DTLIBRO_H
 #define DTLIBRO_H
 #include <string>
+#include "DTMaterial.h"
 
-class DTLibro
+class DTLibro : public DTMaterial
 {
 public:
     std::string autor;

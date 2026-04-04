@@ -6,20 +6,21 @@
 
 class Lector {
     private:
-        int ci;
-        string nombre;
+        std::string ci;
+        std::string nombre;
         DTFecha fechaRegistro;
         Prestamo* prestamos[10];
         int cantidadPrestamos;
 
 public:
     Lector();
-    Lector(int ci, std::string nombre, DTFecha fechaNacimiento);
+    Lector(std::string ci, std::string nombre, DTFecha fechaNacimiento);
     Lector(Lector &c);
-    int getCi();
-    std::string getNombre();
-    DTFecha getFecha();
+    std::string getCi() const;
+    std::string getNombre() const;
+    DTFecha getFecha() const;
     int getCantidadPrestamos() const;
+    Prestamo** getPrestamos();
     void addPrestamo(Prestamo* prestamo);
     ~Lector();
 };

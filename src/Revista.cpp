@@ -1,4 +1,5 @@
 #include "../include/Revista.h"
+#include "../include/DTRevista.h"
 #include <string>
 
 Revista::Revista()
@@ -13,11 +14,7 @@ Revista::Revista(int numeroEdicion, bool esMensual)
     this->esMensual = esMensual;
 }
 
-Revista::Revista(Revista &c)
-{
-    this->numeroEdicion = c.numeroEdicion;
-    this->esMensual = c.esMensual;
-}
+
 
 Revista::~Revista() {}
 
@@ -44,4 +41,14 @@ void Revista::setEsMensual(bool esMensual)
 float Revista::calcularMulta(int diasAtraso)
 {
     return diasAtraso * 2.0;
+}
+
+DTMaterial* Revista::crearDT() {
+    DTRevista* dtRevista = new DTRevista();
+    dtRevista->numeroEdicion = this->numeroEdicion;
+    dtRevista->esMensual = this->esMensual;
+    dtRevista->codigo = this->getCodigo();
+    dtRevista->titulo = this->getTitulo();
+    dtRevista->anioPublicacion = this->getAnioPublicacion();
+    return dtRevista;
 }

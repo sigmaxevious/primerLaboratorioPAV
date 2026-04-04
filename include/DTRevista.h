@@ -1,7 +1,8 @@
 #ifndef DTREVISTA_H
 #define DTREVISTA_H
+#include "DTMaterial.h"
 
-class DTRevista
+class DTRevista : public DTMaterial
 {
 public:
     int numeroEdicion;

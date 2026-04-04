@@ -1,6 +1,7 @@
 #ifndef PRESTAMO_H
 #define PRESTAMO_H
 #include "Material.h"
+#include "DTFecha.h"
 
 class Prestamo
 {
@@ -15,7 +16,7 @@ public:
     Prestamo(Prestamo &c);
     int getDiasPermitidos();
     DTFecha getFechaPrestamo();
-    Material getMaterialPrestado();
+    Material* getMaterialPrestado();
     ~Prestamo();
 };
 #endif

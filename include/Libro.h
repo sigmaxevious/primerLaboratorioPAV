@@ -18,5 +18,6 @@ public:
     Libro(std::string autor, int cantPaginas);
     ~Libro();
     float calcularMulta(int diasAtraso) override;
+    DTMaterial* crearDT() override;
 };
 #endif
