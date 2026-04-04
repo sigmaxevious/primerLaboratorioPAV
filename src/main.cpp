@@ -264,11 +264,6 @@ DTMaterial **verPrestamosAntesDeFecha(std::string ciLector, DTFecha *fecha,
     return resultado;
 }
 
-DTMaterial **verPrestamosAntesDeFecha(std::string ci, DTFecha *fecha,
-                                      int &cantPrestamos)
-{
-    return nullptr; // Implementación por hacer
-}
 
 bool esPrestamoAnterioraFecha(DTFecha *fechaPrestamo, DTFecha *fecha)
 {
