@@ -51,8 +51,9 @@ void Material::setAnioPublicacion(int anioPublicacion)
     this->anioPublicacion = anioPublicacion;
 }
 
-DTMaterial* Material::crearDT() {
-    return nullptr; 
+DTMaterial *Material::crearDT()
+{
+    return nullptr;
 }
 
 Material::~Material() {}

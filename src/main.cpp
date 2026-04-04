@@ -226,65 +226,50 @@ float consultarMultaMaterial(string codigoMat, string ciLector)
     }
 }
 
-DTMaterial **verPrestamosAntesDeFecha(std::string ciLector, DTFecha *fecha,
-                                      int &cantPrestamos)
+DTMaterial **verPrestamosAntesDeFecha(std::string ci, DTFecha *fecha, int &cantPrestamos)
 {
-    Lector *lector = buscarLectorPorCI(ciLector);
+    Lector *lector = buscarLectorPorCI(ci);
     if (lector == nullptr)
     {
         throw std::invalid_argument("Lector no encontrado.");
     }
+    int contador = 0;
+    for (int x = 0; x < lector->getCantidadPrestamos(); x++)
 
-    cantPrestamos = 0;
-    for (int i = 0; i < lector->getCantidadPrestamos(); i++)
     {
-        Prestamo *p = lector->getPrestamos()[i];
-        if (p->getFechaPrestamo().esAnterior(*fecha))
+        if (esPrestamoAnterioraFecha(lector->getPrestamos()[x]->getFechaPrestamo(), fecha))
+            contador++;
+    }
+    DTMaterial **resultado = new DTMaterial *[contador];
+    int indice = 0;
+
+    for (int x = 0; x < lector->getCantidadPrestamos(); x++)
+    {
+        if (esPrestamoAnterioraFecha(lector->getPrestamos()[x]->getFechaPrestamo(), fecha))
         {
-            cantPrestamos++;
+            Material *material = lector->getPrestamos()[x]->getMaterialPrestado();
+            resultado[indice] = material->crearDT();
+            indice++;
         }
     }
-
-    if (cantPrestamos == 0)
-    {
-        return nullptr;
-    }
-
-    DTMaterial **resultado = new DTMaterial *[cantPrestamos];
-    int idx = 0;
-    for (int i = 0; i < lector->getCantidadPrestamos(); i++)
-    {
-        Prestamo *p = lector->getPrestamos()[i];
-        if (p->getFechaPrestamo().esAnterior(*fecha))
-        {
-            resultado[idx++] = p->getMaterialPrestado()->crearDT();
-        }
-    }
-
     return resultado;
 }
 
-DTMaterial **verPrestamosAntesDeFecha(std::string ci, DTFecha *fecha,
-                                      int &cantPrestamos)
+bool esPrestamoAnterioraFecha(DTFecha fechaPrestamo, DTFecha *fecha)
 {
-    return nullptr; // Implementación por hacer
-}
-
-bool esPrestamoAnterioraFecha(DTFecha *fechaPrestamo, DTFecha *fecha)
-{
-    if (fechaPrestamo->getAnio() > fecha->getAnio())
+    if (fechaPrestamo.getAnio() > fecha->getAnio())
         return false;
-    else if (fechaPrestamo->getAnio() < fecha->getAnio())
+    else if (fechaPrestamo.getAnio() < fecha->getAnio())
         return true;
     else
     {
-        if (fechaPrestamo->getMes() > fecha->getMes())
+        if (fechaPrestamo.getMes() > fecha->getMes())
             return false;
-        else if (fechaPrestamo->getMes() < fecha->getMes())
+        else if (fechaPrestamo.getMes() < fecha->getMes())
             return true;
         else
         {
-            return fechaPrestamo->getDia() < fecha->getDia();
+            return fechaPrestamo.getDia() < fecha->getDia();
         }
     }
 }

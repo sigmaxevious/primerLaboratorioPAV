@@ -14,8 +14,6 @@ Libro::Libro(std::string autor, int cantPaginas)
     this->cantPaginas = cantPaginas;
 }
 
-
-
 Libro::~Libro() {}
 
 std::string Libro::getAutor()
@@ -43,8 +41,9 @@ float Libro::calcularMulta(int diasAtraso)
     return diasAtraso * 5.0;
 }
 
-DTMaterial* Libro::crearDT() {
-    DTLibro* dtLibro = new DTLibro();
+DTMaterial *Libro::crearDT()
+{
+    DTLibro *dtLibro = new DTLibro();
     dtLibro->autor = this->autor;
     dtLibro->cantPaginas = this->cantPaginas;
     dtLibro->codigo = this->getCodigo();
