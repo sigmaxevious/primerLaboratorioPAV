@@ -76,7 +76,6 @@ Agradecimientos especiales por el trabajo colaborativo durante los sprints, la r
 Puedes clonar el repositorio con:
 
 ```bash
-git clone https://github.com/usuario/nombre-del-repo.git
+git clone https://github.com/sigmaxevious/primerLaboratorioPAV.git
 ```
 
-*(Reemplazar `usuario/nombre-del-repo` por tu ruta real de GitHub.)*
