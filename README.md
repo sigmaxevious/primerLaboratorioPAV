@@ -42,7 +42,6 @@ Para el control de versiones utilizamos **GitHub** con una estrategia de **branc
 - `makefile`
   - Script para compilar y ejecutar el proyecto de forma sencilla.
 
-*(Ajustar estos nombres si tu estructura es distinta.)*
 
 ## Cómo compilar y ejecutar
 
@@ -60,7 +59,6 @@ g++ -std=c++11 -Wall -Iinclude src/*.cpp -o programa
 ./programa
 ```
 
-*(Adaptar estos comandos a tu estructura real de archivos.)*
 
 ## Equipo
 
