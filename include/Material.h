@@ -9,7 +9,6 @@ private:
     std::string codigo;
     std::string titulo;
     int anioPublicacion;
-
 public:
     std::string getCodigo() const;
     std::string getTitulo() const;

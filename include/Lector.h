@@ -4,7 +4,7 @@
 #include <string>
 #include "DTFecha.h"
 
-class Lector public : Usuario
+class Lector : public Usuario
 {
     private:
         DTFecha fechaRegistro;
@@ -19,6 +19,6 @@ public:
     int getCantidadPrestamos() const;
     Prestamo** getPrestamos();
     void addPrestamo(Prestamo* prestamo);
-    ~Lector();
+    ~Lector();  
 };
 #endif
