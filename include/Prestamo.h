@@ -17,6 +17,7 @@ public:
     int getDiasPermitidos();
     DTFecha getFechaPrestamo();
     Material* getMaterialPrestado();
+    DTPrestamo getDTPermitidos();
     ~Prestamo();
 };
 #endif

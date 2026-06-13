@@ -18,5 +18,6 @@ public:
     ~Revista();
     float calcularMulta(int diasAtraso) override;
     DTMaterial* crearDT() override;
+    DTMaterialResumen* crearDTMaterialResumen() override;
 };
 #endif

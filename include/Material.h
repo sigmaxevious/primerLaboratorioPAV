@@ -21,7 +21,8 @@ public:
     Material(std::string codigo, std::string titulo, int anioPublicacion);
     Material(Material &c);
     virtual DTMaterial* crearDT() = 0;
+    virtual DTMaterialResumen* crearDTMaterialResumen() = 0;
     virtual ~Material();
     virtual float calcularMulta(int diasAtraso) = 0;
 };
-#endif
+#endif  

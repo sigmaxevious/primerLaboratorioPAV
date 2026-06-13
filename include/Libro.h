@@ -1,3 +1,4 @@
+
 #ifndef LIBRO_H
 #define LIBRO_H
 #include "Material.h"
@@ -19,5 +20,6 @@ public:
     ~Libro();
     float calcularMulta(int diasAtraso) override;
     DTMaterial* crearDT() override;
+    DTMaterialResumen* crearDTMaterialResumen() override;
 };
 #endif
