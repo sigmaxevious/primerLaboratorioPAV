@@ -3,6 +3,7 @@
 #include "Prestamo.h"
 #include <string>
 #include "DTFecha.h"
+#include "Usuario.h"
 
 class Lector : public Usuario
 {
@@ -13,12 +14,12 @@ class Lector : public Usuario
 
 public:
     Lector();
-    Lector(DTFecha fechaNacimiento);
-    Lector(Lector &c);
+    Lector(std::string ci, std::string nombre, std::string password, DTFecha fechaRegistro);
+    Lector(const Lector& c);
     DTFecha getFecha() const;
     int getCantidadPrestamos() const;
     Prestamo** getPrestamos();
     void addPrestamo(Prestamo* prestamo);
-    ~Lector();  
+    ~Lector();
 };
 #endif

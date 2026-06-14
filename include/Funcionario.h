@@ -1,20 +1,16 @@
-#ifndef LECTOR_H
-#define LECTOR_H
-#include "Prestamo.h"
-#include <string>
-#include "DTFecha.h"
+#ifndef FUNCIONARIO_H
+#define FUNCIONARIO_H
+#include "Usuario.h"
 
-class Funcionario public : Usuario
-{
-    private:
-        int numEmpleado;
+class Funcionario : public Usuario {
+private:
+    int numEmpleado;
 
 public:
-    Lector();
-    Lector(DTFecha fechaNacimiento);
-    Lector(Lector &c);
-
-    DTFuncionario getDTFuncionario();
-    ~Lector();
+    Funcionario();
+    Funcionario(std::string ci, std::string nombre, std::string password, int numEmpleado);
+    Funcionario(const Funcionario& c);
+    int getNumEmpleado() const;
+    ~Funcionario();
 };
 #endif

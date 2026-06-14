@@ -3,14 +3,15 @@
 #include "Usuario.h"
 
 class Sesion {
-    private: Usuario* usuarioAutenticado;
+private:
+    Usuario* usuarioAutenticado;
 
-    public: 
-    Usuario* getUsuarioAutenticado();
-    void setUsuarioAutenticado(Usuario* usuario);
+public:
     Sesion();
-    ~Sesion();
     Sesion(Usuario* usuario);
     void Cerrar();
+    Usuario* getUsuarioAutenticado() const;
+    void setUsuarioAutenticado(Usuario* usuario);
+    ~Sesion();
 };
 #endif

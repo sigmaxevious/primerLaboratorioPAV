@@ -1,6 +1,5 @@
 #ifndef USUARIO_H
 #define USUARIO_H
-#include "Prestamo.h"
 #include <string>
 #include "DTFecha.h"
 
@@ -11,9 +10,6 @@ class Usuario {
         std::string nombre;
         std::string password;
         // DTFecha fechaRegistro; esto será sólo de LECTOR
-        Prestamo* prestamos[10];
-        int cantidadPrestamos;
-
 public:
     Usuario();
     Usuario(std::string ci, std::string nombre, std::string password);
@@ -25,6 +21,7 @@ public:
     // int getCantidadPrestamos() const;
     // Prestamo** getPrestamos();
     // void addPrestamo(Prestamo* prestamo);
-    ~Usuario();
+    bool checkPassword(std::string password) const;
+    virtual ~Usuario();
 };
 #endif
