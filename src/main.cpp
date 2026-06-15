@@ -109,6 +109,10 @@ int main() {
                 break;
             }
             case 3: {
+                if (!cs->hayFuncionarioActivo()) {
+                    cout << "ERROR: Se requiere sesion de funcionario." << endl;
+                break;
+                }
                 string ci, nombre, pass;
                 int d, m, a;
                 cin.ignore();
@@ -126,6 +130,10 @@ int main() {
                 break;
             }
             case 4: {
+                if (!cs->hayFuncionarioActivo()) {
+                    cout << "ERROR: Se requiere sesion de funcionario." << endl;
+                break;
+                }
                 string ci, nombre, pass;
                 int numEmp;
                 cin.ignore();
@@ -142,6 +150,10 @@ int main() {
                 break;
             }
             case 5: {
+                if (!cs->hayFuncionarioActivo()) {
+                    cout << "ERROR: Se requiere sesion de funcionario." << endl;
+                break;
+                }
                 string ci, codigo;
                 int dias, d, m, a;
                 cout << "CI lector: "; cin >> ci;
@@ -178,6 +190,10 @@ int main() {
                 break;
             }
             case 7: {
+                if (!cs->hayFuncionarioActivo()) {
+                    cout << "ERROR: Se requiere sesion de funcionario." << endl;
+                break;
+                }
                 string ci;
                 cout << "CI lector a eliminar: "; cin >> ci;
                 DTLector* dl = cu->seleccionarLectorAEliminar(ci);
@@ -189,6 +205,10 @@ int main() {
                 break;
             }
             case 8: {
+                if (!cs->hayFuncionarioActivo()) {
+                    cout << "ERROR: Se requiere sesion de funcionario." << endl;
+                break;
+                }
                 string codigo, titulo, autor;
                 int anio, pags;
                 cin.ignore();
@@ -207,6 +227,10 @@ int main() {
                 break;
             }
             case 9: {
+                if (!cs->hayFuncionarioActivo()) {
+                    cout << "ERROR: Se requiere sesion de funcionario." << endl;
+                break;
+                }
                 string codigo, titulo;
                 int anio, edicion, mensualInt;
                 cin.ignore();
@@ -224,6 +248,10 @@ int main() {
                 break;
             }
             case 10: {
+                if (!cs->hayFuncionarioActivo()) {
+                    cout << "ERROR: Se requiere sesion de funcionario." << endl;
+                break;
+                }
                 string codigo;
                 cout << "Codigo material a eliminar: "; cin >> codigo;
                 DTMaterial* dm = cm->seleccionarMaterialAEliminar(codigo);

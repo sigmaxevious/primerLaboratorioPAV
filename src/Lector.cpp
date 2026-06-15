@@ -14,14 +14,6 @@ Lector::Lector()
     this->cantidadPrestamos = 0;
 }
 
-Lector::Lector(DTFecha fechaRegistro) {
-    this->fechaRegistro = fechaRegistro;
-    for (int i = 0; i < 10; i++) {
-        this->prestamos[i] = nullptr;
-    }
-    this->cantidadPrestamos = 0;
-    }
-
 
 DTFecha Lector::getFecha() const {
     return this->fechaRegistro;

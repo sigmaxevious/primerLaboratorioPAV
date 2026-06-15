@@ -12,5 +12,7 @@ public:
 
     bool iniciarSesion(std::string ci, std::string password) override;
     void cerrarSesion() override;
+    bool hayFuncionarioActivo() override;
+    bool hayLectorActivo() override;
 };
 #endif

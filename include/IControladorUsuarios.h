@@ -33,6 +33,8 @@ public:
     virtual void confirmarEliminacionLector() = 0;
     virtual void cancelarEliminacionLector() = 0;
 
+    
+
     virtual ~IControladorUsuarios() {}
 };
 
