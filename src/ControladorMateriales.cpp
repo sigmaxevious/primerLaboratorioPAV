@@ -3,6 +3,7 @@
 #include "../include/Libro.h"
 #include "../include/Revista.h"
 #include "../include/DTMaterial.h"
+#include "../include/DTMaterialResumen.h"
 #include <stdexcept>
 
 ControladorMateriales::ControladorMateriales()

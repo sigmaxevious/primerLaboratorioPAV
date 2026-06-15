@@ -2,6 +2,7 @@
 #define PRESTAMO_H
 #include "Material.h"
 #include "DTFecha.h"
+#include "DTPrestamo.h"
 
 class Prestamo
 {

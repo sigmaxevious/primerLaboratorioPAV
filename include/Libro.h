@@ -3,6 +3,7 @@
 #define LIBRO_H
 #include "Material.h"
 #include <string>
+#include "DTMaterialResumen.h"
 
 class Libro : public Material
 {

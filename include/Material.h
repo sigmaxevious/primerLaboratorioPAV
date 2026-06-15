@@ -2,6 +2,7 @@
 #define MATERIAL_H
 #include <string>
 #include "DTMaterial.h"
+#include "DTMaterialResumen.h"
 
 class Material
 {

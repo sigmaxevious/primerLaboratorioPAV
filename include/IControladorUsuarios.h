@@ -5,7 +5,10 @@
 #include "DTFecha.h"
 #include "DTMaterial.h"
 #include "DTPrestamo.h"
-
+#include "DTLector.h"
+#include "DTFuncionario.h"
+#include "DTDatosPrestamo.h"
+#include "DTLectorPrestamos.h"
 
 class IControladorUsuarios {
 public:

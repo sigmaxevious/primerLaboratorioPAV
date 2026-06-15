@@ -4,6 +4,7 @@
 #include <set>
 #include <string>
 #include "DTMaterial.h"
+#include "DTMaterialResumen.h"
 
 class Material;
 

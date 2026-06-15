@@ -14,7 +14,9 @@ Revista::Revista(int numeroEdicion, bool esMensual)
     this->esMensual = esMensual;
 }
 
-
+DTMaterialResumen* Revista::crearDTMaterialResumen() {
+    return new DTMaterialResumen(this->getCodigo(), this->getTitulo());
+}
 
 Revista::~Revista() {}
 

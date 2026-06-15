@@ -1,6 +1,10 @@
 #include "../include/Lector.h"
 #include <string>
 
+Lector::Lector(std::string ci, std::string nombre, std::string password, DTFecha fechaRegistro)
+    : Usuario(ci, nombre, password), fechaRegistro(fechaRegistro), cantidadPrestamos(0) {
+    for (int i = 0; i < 10; i++) prestamos[i] = nullptr;
+}
 Lector::Lector()
 {
     this->fechaRegistro = DTFecha();
@@ -19,9 +23,6 @@ Lector::Lector(DTFecha fechaRegistro) {
     }
 
 
-std::string Lector::getNombre() const  {
-    return this->nombre;
-}
 DTFecha Lector::getFecha() const {
     return this->fechaRegistro;
 }

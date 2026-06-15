@@ -238,7 +238,7 @@ int main() {
                 int d, m, a, h, mn;
                 cout << "Nueva fecha [dd mm aaaa hh mm]: ";
                 cin >> d >> m >> a >> h >> mn;
-                reloj->modificarFecha(d, m, a, h, mn);
+                reloj->setFecha(d, m, a, h, mn);
                 cout << "Fecha actualizada: " << reloj->toString() << endl;
                 break;
             }

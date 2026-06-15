@@ -13,3 +13,4 @@ public:
     bool iniciarSesion(std::string ci, std::string password) override;
     void cerrarSesion() override;
 };
+#endif

@@ -8,3 +8,4 @@ public:
     virtual bool iniciarSesion(std::string ci, std::string password) = 0;
     virtual void cerrarSesion() = 0;   
 };
+#endif

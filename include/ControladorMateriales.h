@@ -6,6 +6,7 @@
 #include "IControladorMateriales.h"
 #include "Material.h"
 #include "DTMaterial.h"
+#include "DTMaterialResumen.h"
 
 class ControladorMateriales : public IControladorMateriales {
 private:

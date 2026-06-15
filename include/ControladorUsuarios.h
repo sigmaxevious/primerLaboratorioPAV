@@ -4,6 +4,15 @@
 #include <string>
 #include "IControladorUsuarios.h"
 #include "DTFecha.h"
+#include "DTLector.h"
+#include "DTFuncionario.h"
+#include "DTMaterial.h"
+#include "DTDatosPrestamo.h"
+#include "DTLectorPrestamos.h"
+#include "Lector.h"
+#include "Material.h"
+#include "ManejadorUsuarios.h"
+#include "ManejadorMateriales.h"
 
 class ControladorUsuarios : public IControladorUsuarios {
 private:

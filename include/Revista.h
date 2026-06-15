@@ -1,6 +1,7 @@
 #ifndef REVISTA_H
 #define REVISTA_H
 #include "Material.h"
+#include "DTMaterialResumen.h"
 
 class Revista : public Material
 {

@@ -51,3 +51,7 @@ DTMaterial *Libro::crearDT()
     dtLibro->anioPublicacion = this->getAnioPublicacion();
     return dtLibro;
 }
+
+ DTMaterialResumen* Libro::crearDTMaterialResumen() {
+    return new DTMaterialResumen(this->getCodigo(), this->getTitulo());
+}
