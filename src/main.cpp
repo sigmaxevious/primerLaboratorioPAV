@@ -1,13 +1,11 @@
-#include "../include/DTFecha.h"
-#include "../include/DTLibro.h"
+#include "../include/Fabrica.h"
+#include "../include/RelojSistema.h"
+#include "../include/DTLector.h"
+#include "../include/DTFuncionario.h"
+#include "../include/DTDatosPrestamo.h"
+#include "../include/DTLectorPrestamos.h"
+#include "../include/DTPrestamo.h"
 #include "../include/DTMaterial.h"
-#include "../include/DTRevista.h"
-#include "../include/Lector.h"
-#include "../include/Libro.h"
-#include "../include/Material.h"
-#include "../include/Prestamo.h"
-#include "../include/Revista.h"
-#include <ctime>
 #include <iostream>
 #include <limits>
 #include <stdexcept>
@@ -15,524 +13,259 @@
 
 using namespace std;
 
-#define MAX_LECTORES 100
-#define MAX_MATERIALES 100
+void cargarDatosPrueba(IControladorUsuarios* cu, IControladorMateriales* cm) {
+    // Lectores
+    DTFecha f1(1, 3, 2024);
+    DTLector* l1 = cu->ingresarDatosLector("11111111", "Ana Garcia", "pass1", f1);
+    cu->confirmarRegistro();
+    delete l1;
 
-// -- GLOBALS --
-int topeLectores = 0;
-Lector *lectores[MAX_LECTORES];
+    DTFecha f2(15, 6, 2023);
+    DTLector* l2 = cu->ingresarDatosLector("22222222", "Carlos Lopez", "pass2", f2);
+    cu->confirmarRegistro();
+    delete l2;
 
-int topeMateriales = 0;
-Material *materiales[MAX_MATERIALES];
+    // Funcionario
+    DTFuncionario* func = cu->ingresarDatosFuncionario("99999999", "Maria Admin", "admin123", 1001);
+    cu->confirmarRegistro();
+    delete func;
 
-// -- MENÚ ENUM --
-enum Menu
-{
-    ing_opcion = 0,
-    reg_lector,
-    ag_prestamo,
-    obt_mats,
-    cons_multa,
-    ver_prestamos,
-    ag_material,
-    salir
-};
+    // Materiales
+    cm->ingresarDatosMaterial("LIB001", "El Principito", 1943);
+    cm->ingresarDatosLibro("Antoine de Saint-Exupery", 96);
+    cm->confirmarRegistro();
 
-// -- HELPER FUNCTIONS --
-Lector *buscarLectorPorCI(string ci)
-{
-    for (int i = 0; i < topeLectores; i++)
-    {
-        if (lectores[i]->getCi() == ci)
-        {
-            return lectores[i];
-        }
-    }
-    return nullptr;
+    cm->ingresarDatosMaterial("LIB002", "Cien Anios de Soledad", 1967);
+    cm->ingresarDatosLibro("Gabriel Garcia Marquez", 471);
+    cm->confirmarRegistro();
+
+    cm->ingresarDatosMaterial("REV001", "National Geographic", 2024);
+    cm->ingresarDatosRevista(312, true);
+    cm->confirmarRegistro();
+
+    // Prestamo
+    DTLector* lp = cu->ingresarIDLector("11111111");
+    delete lp;
+    DTMaterial* mp = cu->ingresarCodigoMaterial("LIB001");
+    delete mp;
+    DTFecha fp(10, 6, 2026);
+    DTDatosPrestamo* dp = cu->ingresarDatosPrestamo(fp, 14);
+    delete dp;
+    cu->confirmarPrestamo();
+
+    cout << "  Datos de prueba cargados OK." << endl;
 }
 
-Material *buscarMaterialPorCodigo(string codigo)
-{
-    for (int i = 0; i < topeMateriales; i++)
-    {
-        if (materiales[i]->getCodigo() == codigo)
-        {
-            return materiales[i];
-        }
-    }
-    return nullptr;
-}
+int main() {
+    Fabrica* fab = Fabrica::getInstancia();
+    IControladorSesion*     cs = fab->getControladorSesion();
+    IControladorUsuarios*   cu = fab->getControladorUsuarios();
+    IControladorMateriales* cm = fab->getControladorMateriales();
+    RelojSistema*           reloj = RelojSistema::getInstancia();
 
-int fechaADias(DTFecha fecha)
-{
-    return fecha.getAnio() * 365 + fecha.getMes() * 30 + fecha.getDia();
-}
+    int opcion = -1;
+    bool salir = false;
 
-int obtenerHoy()
-{
-    time_t t = time(nullptr);
-    tm *hoy = localtime(&t);
-    return (hoy->tm_year + 1900) * 365 + (hoy->tm_mon + 1) * 30 + hoy->tm_mday;
-}
+    while (!salir) {
+        cout << "\n========== BIBLIOTECA ==========\n";
+        cout << "  Fecha sistema: " << reloj->toString() << "\n";
+        cout << "---------------------------------\n";
+        cout << " 1) Iniciar sesion\n";
+        cout << " 2) Cerrar sesion\n";
+        cout << " 3) Registrar lector\n";
+        cout << " 4) Registrar funcionario\n";
+        cout << " 5) Registrar prestamo\n";
+        cout << " 6) Consultar prestamos de lector\n";
+        cout << " 7) Eliminar lector\n";
+        cout << " 8) Agregar material (libro)\n";
+        cout << " 9) Agregar material (revista)\n";
+        cout << "10) Eliminar material\n";
+        cout << "11) Modificar fecha del sistema\n";
+        cout << "12) Consultar fecha del sistema\n";
+        cout << "13) Cargar datos de prueba\n";
+        cout << " 0) Salir\n";
+        cout << "Opcion: ";
 
-void registrarLector(string ci, string nombre, DTFecha *fechaRegistro)
-{
-    if (topeLectores >= MAX_LECTORES)
-    {
-        throw std::invalid_argument(
-            "No se pueden registrar más lectores. Capacidad máxima alcanzada.");
-    }
-    if (buscarLectorPorCI(ci) != nullptr)
-    {
-        throw std::invalid_argument(
-            "Ya existe un lector registrado con esa cédula");
-    }
-    lectores[topeLectores++] = new Lector(ci, nombre, *fechaRegistro);
-    delete fechaRegistro;
-}
-
-void agregarPrestamo(string ciLector, string codigoMat, int diasPermitidos,
-                     DTFecha *fechaPrestamo)
-{
-    Lector *lector = buscarLectorPorCI(ciLector);
-    if (lector == nullptr)
-    {
-        delete fechaPrestamo;
-        throw std::invalid_argument("El lector no existe en el sistema.");
-    }
-    Material *material = buscarMaterialPorCodigo(codigoMat);
-    if (material == nullptr)
-    {
-        delete fechaPrestamo;
-        throw std::invalid_argument("El material no existe en el sistema.");
-    }
-
-    Prestamo *nuevoPrestamo =
-        new Prestamo(material, diasPermitidos, *fechaPrestamo);
-    lector->addPrestamo(nuevoPrestamo);
-    delete fechaPrestamo;
-}
-
-DTMaterial **obtenerMaterialesPrestados(string ciLector, int &cantMateriales)
-{
-    Lector *lector = buscarLectorPorCI(ciLector);
-    if (lector == nullptr)
-    {
-        throw std::invalid_argument("Lector no encontrado.");
-    }
-
-    cantMateriales = lector->getCantidadPrestamos();
-    if (cantMateriales == 0)
-    {
-        return nullptr;
-    }
-
-    DTMaterial **resultado = new DTMaterial *[cantMateriales];
-
-    for (int i = 0; i < cantMateriales; i++)
-    {
-        Prestamo *p = lector->getPrestamos()[i];
-        Material *m = p->getMaterialPrestado();
-        resultado[i] = m->crearDT();
-    }
-    return resultado;
-}
-
-void agregarMaterial(DTMaterial *dt)
-{
-    if (topeMateriales >= MAX_MATERIALES)
-    {
-        throw std::invalid_argument("No se pueden agregar más materiales.");
-    }
-    if (buscarMaterialPorCodigo(dt->codigo) != nullptr)
-    {
-        throw std::invalid_argument("Ya existe un material con ese código.");
-    }
-
-    Material *nuevoMat = nullptr;
-
-    if (DTLibro *dtLibro = dynamic_cast<DTLibro *>(dt))
-    {
-        Libro *libro = new Libro(dtLibro->autor, dtLibro->cantPaginas);
-        libro->setCodigo(dtLibro->codigo);
-        libro->setTitulo(dtLibro->titulo);
-        libro->setAnioPublicacion(dtLibro->anioPublicacion);
-        nuevoMat = libro;
-    }
-    else if (DTRevista *dtRevista = dynamic_cast<DTRevista *>(dt))
-    {
-        Revista *revista =
-            new Revista(dtRevista->numeroEdicion, dtRevista->esMensual);
-        revista->setCodigo(dtRevista->codigo);
-        revista->setTitulo(dtRevista->titulo);
-        revista->setAnioPublicacion(dtRevista->anioPublicacion);
-        nuevoMat = revista;
-    }
-
-    if (nuevoMat)
-    {
-        materiales[topeMateriales++] = nuevoMat;
-    }
-    else
-    {
-        throw std::invalid_argument("Tipo de DTMaterial no reconocido.");
-    }
-}
-
-float consultarMultaMaterial(string codigoMat, string ciLector)
-{
-    Material *mat = buscarMaterialPorCodigo(codigoMat);
-    if (mat == nullptr)
-    {
-        throw std::invalid_argument("No existe un material con ese código.");
-    }
-
-    Lector *lector = buscarLectorPorCI(ciLector);
-    if (lector == nullptr)
-    {
-        throw std::invalid_argument("No existe un lector con esa cédula.");
-    }
-
-    Prestamo *prestamoEncontrado = nullptr;
-    for (int i = 0; i < lector->getCantidadPrestamos(); i++)
-    {
-        Prestamo *p = lector->getPrestamos()[i];
-        if (p->getMaterialPrestado()->getCodigo() == codigoMat)
-        {
-            prestamoEncontrado = p;
-            break;
-        }
-    }
-
-    if (prestamoEncontrado == nullptr)
-    {
-        throw std::invalid_argument(
-            "El lector no tiene un préstamo de ese material.");
-    }
-
-    int diasFechaPrestamo = fechaADias(prestamoEncontrado->getFechaPrestamo());
-    int fechaDevolucion =
-        diasFechaPrestamo + prestamoEncontrado->getDiasPermitidos();
-    int hoy = obtenerHoy();
-    int diasAtraso = hoy - fechaDevolucion;
-
-    if (diasAtraso <= 0)
-    {
-        return 0; // Al día
-    }
-    else
-    {
-        return mat->calcularMulta(diasAtraso);
-    }
-}
-
-bool esPrestamoAnterioraFecha(DTFecha fechaPrestamo, DTFecha *fecha)
-{
-    if (fechaPrestamo.getAnio() > fecha->getAnio())
-        return false;
-    else if (fechaPrestamo.getAnio() < fecha->getAnio())
-        return true;
-    else
-    {
-        if (fechaPrestamo.getMes() > fecha->getMes())
-            return false;
-        else if (fechaPrestamo.getMes() < fecha->getMes())
-            return true;
-        else
-        {
-            return fechaPrestamo.getDia() < fecha->getDia();
-        }
-    }
-}
-DTMaterial **verPrestamosAntesDeFecha(std::string ci, DTFecha *fecha, int &cantPrestamos)
-{
-    Lector *lector = buscarLectorPorCI(ci);
-    if (lector == nullptr)
-    {
-        throw std::invalid_argument("Lector no encontrado.");
-    }
-    int contador = 0;
-    for (int x = 0; x < lector->getCantidadPrestamos(); x++)
-
-    {
-        if (esPrestamoAnterioraFecha(lector->getPrestamos()[x]->getFechaPrestamo(), fecha))
-            contador++;
-    }
-    if (contador == 0)
-    {
-        cantPrestamos = 0;
-        return nullptr;
-    }
-    DTMaterial **resultado = new DTMaterial *[contador];
-    int indice = 0;
-
-    for (int x = 0; x < lector->getCantidadPrestamos(); x++)
-    {
-        if (esPrestamoAnterioraFecha(lector->getPrestamos()[x]->getFechaPrestamo(), fecha))
-        {
-            Material *material = lector->getPrestamos()[x]->getMaterialPrestado();
-            resultado[indice] = material->crearDT();
-            indice++;
-        }
-    }
-    cantPrestamos = contador;
-    return resultado;
-}
-
-int main()
-{
-    int opcionUser = -1;
-    bool salirSistema = false;
-
-    while (!salirSistema)
-    {
-        std::cout << "\n--- BIBLIOTECA ---\n";
-        std::cout << "1) Registrar un lector\n";
-        std::cout << "2) Agregar un préstamo\n";
-        std::cout << "3) Obtener materiales prestados\n";
-        std::cout << "4) Consultar multa de material\n";
-        std::cout << "5) Ver préstamos antes de fecha\n";
-        std::cout << "6) Agregar material\n";
-        std::cout << "7) Salir\n";
-        std::cout << "Opción: ";
-
-        if (!(std::cin >> opcionUser))
-        {
-            std::cerr << "Entrada inválida\n";
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        if (!(cin >> opcion)) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             continue;
         }
 
-        Menu opc = static_cast<Menu>(opcionUser);
+        try {
+            switch (opcion) {
 
-        try
-        {
-            switch (opc)
-            {
-            case reg_lector:
-            {
-                std::string nombreLector, ciLector;
-                std::cin.ignore();
-                std::cout << "Ingrese nombre: ";
-                std::getline(std::cin, nombreLector);
-                if (nombreLector.empty())
-                    throw std::invalid_argument("El nombre no puede estar vacío.");
-
-                std::cout << "Ingrese CI: ";
-                std::cin >> ciLector;
-
-                std::cout << "Fecha registro (dd mm aaaa): ";
+            case 1: {
+                string ci, pass;
+                cout << "CI: "; cin >> ci;
+                cout << "Password: "; cin >> pass;
+                bool ok = cs->iniciarSesion(ci, pass);
+                cout << (ok ? "Sesion iniciada." : "CI o password incorrectos.") << endl;
+                break;
+            }
+            case 2: {
+                cs->cerrarSesion();
+                cout << "Sesion cerrada." << endl;
+                break;
+            }
+            case 3: {
+                string ci, nombre, pass;
                 int d, m, a;
-                if (!(std::cin >> d >> m >> a))
-                {
-                    throw std::invalid_argument("Formato de fecha inválido.");
-                }
-
-                DTFecha *fechaRegistro = new DTFecha(d, m, a);
-                registrarLector(ciLector, nombreLector, fechaRegistro);
-                std::cout << "Lector registrado éxitosamente.\n";
+                cin.ignore();
+                cout << "CI: "; getline(cin, ci);
+                cout << "Nombre: "; getline(cin, nombre);
+                cout << "Password: "; getline(cin, pass);
+                cout << "Fecha registro (dd mm aaaa): "; cin >> d >> m >> a;
+                DTFecha fecha(d, m, a);
+                DTLector* dt = cu->ingresarDatosLector(ci, nombre, pass, fecha);
+                cout << "Confirmar registro? (1=Si 0=No): ";
+                int conf; cin >> conf;
+                if (conf == 1) { cu->confirmarRegistro(); cout << "Lector registrado." << endl; }
+                else { cu->cancelar(); cout << "Cancelado." << endl; }
+                delete dt;
                 break;
             }
-            case ag_prestamo:
-            {
-                std::cout << "Ingrese CI del lector: ";
-                std::string ciLector;
-                std::cin >> ciLector;
-
-                std::cout << "Ingrese código de material: ";
-                std::string codigoMat;
-                std::cin >> codigoMat;
-
-                std::cout << "Días permitidos: ";
-                int dias;
-                if (!(std::cin >> dias) || dias <= 0)
-                {
-                    throw std::invalid_argument("Días inválidos.");
-                }
-
-                std::cout << "Fecha préstamo (dd mm aaaa): ";
-                int d, m, a;
-                if (!(std::cin >> d >> m >> a))
-                {
-                    throw std::invalid_argument("Formato de fecha inválido.");
-                }
-
-                DTFecha *fechaPrestamo = new DTFecha(d, m, a);
-                agregarPrestamo(ciLector, codigoMat, dias, fechaPrestamo);
-                std::cout << "Préstamo agregado éxitosamente.\n";
+            case 4: {
+                string ci, nombre, pass;
+                int numEmp;
+                cin.ignore();
+                cout << "CI: "; getline(cin, ci);
+                cout << "Nombre: "; getline(cin, nombre);
+                cout << "Password: "; getline(cin, pass);
+                cout << "Num empleado: "; cin >> numEmp;
+                DTFuncionario* dt = cu->ingresarDatosFuncionario(ci, nombre, pass, numEmp);
+                cout << "Confirmar? (1=Si 0=No): ";
+                int conf; cin >> conf;
+                if (conf == 1) { cu->confirmarRegistro(); cout << "Funcionario registrado." << endl; }
+                else { cu->cancelar(); cout << "Cancelado." << endl; }
+                delete dt;
                 break;
             }
-            case obt_mats:
-            {
-                std::cout << "Ingrese CI del lector: ";
-                std::string ciLector;
-                std::cin >> ciLector;
-
-                int cant = 0;
-                DTMaterial **mPrestados = obtenerMaterialesPrestados(ciLector, cant);
-
-                if (cant == 0 || mPrestados == nullptr)
-                {
-                    std::cout << "El lector no tiene materiales prestados.\n";
-                }
-                else
-                {
-                    std::cout << "Materiales prestados al lector:\n";
-                    for (int i = 0; i < cant; i++)
-                    {
-                        mPrestados[i]->imprimirInfo();
-                        delete mPrestados[i];
-                    }
-                    delete[] mPrestados;
-                }
+            case 5: {
+                string ci, codigo;
+                int dias, d, m, a;
+                cout << "CI lector: "; cin >> ci;
+                DTLector* dl = cu->ingresarIDLector(ci);
+                cout << "  Lector: " << dl->nombre << endl;
+                delete dl;
+                cout << "Codigo material: "; cin >> codigo;
+                DTMaterial* dm = cu->ingresarCodigoMaterial(codigo);
+                cout << "  Material: " << dm->titulo << endl;
+                delete dm;
+                cout << "Fecha prestamo (dd mm aaaa): "; cin >> d >> m >> a;
+                cout << "Dias devolucion: "; cin >> dias;
+                DTFecha fecha(d, m, a);
+                DTDatosPrestamo* dp = cu->ingresarDatosPrestamo(fecha, dias);
+                cout << "Confirmar? (1=Si 0=No): ";
+                int conf; cin >> conf;
+                if (conf == 1) { cu->confirmarPrestamo(); cout << "Prestamo registrado." << endl; }
+                else { cu->cancelarPrestamo(); cout << "Cancelado." << endl; }
+                delete dp;
                 break;
             }
-            case cons_multa:
-            {
-                std::cout << "Ingrese CI del lector: ";
-                std::string ciLector;
-                std::cin >> ciLector;
-
-                std::cout << "Ingrese código de material: ";
-                std::string codigoMat;
-                std::cin >> codigoMat;
-
-                float multa = consultarMultaMaterial(codigoMat, ciLector);
-                if (multa == 0)
-                {
-                    std::cout << "El material no tiene atraso.\n";
+            case 6: {
+                string ci;
+                cout << "CI lector: "; cin >> ci;
+                DTLectorPrestamos* dlp = cu->consultarPrestamosLector(ci);
+                cout << "Prestamos de " << dlp->nombreLector << ":" << endl;
+                if (dlp->prestamos.empty()) cout << "  (sin prestamos)" << endl;
+                for (DTPrestamo* p : dlp->prestamos) {
+                    cout << "  - " << p->tituloMaterial
+                         << " | Codigo: " << p->codigoMaterial
+                         << " | Dias: " << p->diasPermitidos << endl;
                 }
-                else
-                {
-                    std::cout << "Multa generada: $" << multa << "\n";
-                }
+                delete dlp;
                 break;
             }
-            case ver_prestamos:
-            {
-                std::cout << "Ingrese CI del lector: ";
-                std::string ciLector;
-                std::cin >> ciLector;
-
-                std::cout << "Ingrese fecha límite (dd mm aaaa): ";
-                int d, m, a;
-                if (!(std::cin >> d >> m >> a))
-                {
-                    throw std::invalid_argument("Formato de fecha inválido.");
-                }
-
-                DTFecha fechaLimite(d, m, a);
-                int cant = 0;
-                DTMaterial **mPrestados =
-                    verPrestamosAntesDeFecha(ciLector, &fechaLimite, cant);
-
-                if (mPrestados == nullptr)
-                {
-                    std::cout << "No hay préstamos anteriores a esta fecha.\n";
-                }
-                else
-                {
-                    std::cout << "Préstamos antes de fecha:\n";
-                    for (int i = 0; i < cant; i++)
-                    {
-                        mPrestados[i]->imprimirInfo();
-                        delete mPrestados[i];
-                    }
-                    delete[] mPrestados;
-                }
+            case 7: {
+                string ci;
+                cout << "CI lector a eliminar: "; cin >> ci;
+                DTLector* dl = cu->seleccionarLectorAEliminar(ci);
+                cout << "  Lector: " << dl->nombre << ". Confirmar? (1=Si 0=No): ";
+                int conf; cin >> conf;
+                if (conf == 1) { cu->confirmarEliminacionLector(); cout << "Lector eliminado." << endl; }
+                else { cu->cancelarEliminacionLector(); cout << "Cancelado." << endl; }
+                delete dl;
                 break;
             }
-            case ag_material:
-            {
-                std::cout << "Tipo de material (1=Libro, 2=Revista): ";
-                int tipo;
-                if (!(std::cin >> tipo) || (tipo != 1 && tipo != 2))
-                {
-                    throw std::invalid_argument("Tipo inválido.");
-                }
-
-                std::cout << "Código: ";
-                std::string codigo;
-                std::cin >> codigo;
-
-                std::cin.ignore();
-                std::cout << "Título: ";
-                std::string titulo;
-                std::getline(std::cin, titulo);
-
-                std::cout << "Año: ";
-                int anio;
-                std::cin >> anio;
-
-                DTMaterial *dtNuevo = nullptr;
-
-                std::cin.ignore();
-                if (tipo == 1)
-                { // Libro
-                    std::cout << "Autor: ";
-                    std::string autor;
-                    std::getline(std::cin, autor);
-
-                    std::cout << "Páginas: ";
-                    int pags;
-                    std::cin >> pags;
-
-                    DTLibro *dtL = new DTLibro(autor, pags);
-                    dtL->codigo = codigo;
-                    dtL->titulo = titulo;
-                    dtL->anioPublicacion = anio;
-                    dtNuevo = dtL;
-                }
-                else
-                { // Revista
-                    std::cout << "Edición: ";
-                    int edicion;
-                    std::cin >> edicion;
-
-                    std::cout << "¿Es mensual? (1=Sí, 0=No): ";
-                    int esMensualInt;
-                    std::cin >> esMensualInt;
-                    bool esMensual = (esMensualInt != 0);
-
-                    DTRevista *dtR = new DTRevista(edicion, esMensual);
-                    dtR->codigo = codigo;
-                    dtR->titulo = titulo;
-                    dtR->anioPublicacion = anio;
-                    dtNuevo = dtR;
-                }
-
-                agregarMaterial(dtNuevo);
-                delete dtNuevo;
-                std::cout << "Material agregado éxitosamente.\n";
+            case 8: {
+                string codigo, titulo, autor;
+                int anio, pags;
+                cin.ignore();
+                cout << "Codigo: "; getline(cin, codigo);
+                cout << "Titulo: "; getline(cin, titulo);
+                cout << "Anio: "; cin >> anio;
+                cin.ignore();
+                cout << "Autor: "; getline(cin, autor);
+                cout << "Paginas: "; cin >> pags;
+                cm->ingresarDatosMaterial(codigo, titulo, anio);
+                cm->ingresarDatosLibro(autor, pags);
+                cout << "Confirmar? (1=Si 0=No): ";
+                int conf; cin >> conf;
+                if (conf == 1) { cm->confirmarRegistro(); cout << "Libro registrado." << endl; }
+                else { cm->cancelar(); cout << "Cancelado." << endl; }
                 break;
             }
-            case salir:
-                salirSistema = true;
-                std::cout << "Saliendo...\n";
+            case 9: {
+                string codigo, titulo;
+                int anio, edicion, mensualInt;
+                cin.ignore();
+                cout << "Codigo: "; getline(cin, codigo);
+                cout << "Titulo: "; getline(cin, titulo);
+                cout << "Anio: "; cin >> anio;
+                cout << "Num edicion: "; cin >> edicion;
+                cout << "Es mensual? (1=Si 0=No): "; cin >> mensualInt;
+                cm->ingresarDatosMaterial(codigo, titulo, anio);
+                cm->ingresarDatosRevista(edicion, mensualInt == 1);
+                cout << "Confirmar? (1=Si 0=No): ";
+                int conf; cin >> conf;
+                if (conf == 1) { cm->confirmarRegistro(); cout << "Revista registrada." << endl; }
+                else { cm->cancelar(); cout << "Cancelado." << endl; }
+                break;
+            }
+            case 10: {
+                string codigo;
+                cout << "Codigo material a eliminar: "; cin >> codigo;
+                DTMaterial* dm = cm->seleccionarMaterialAEliminar(codigo);
+                cout << "  Material: " << dm->titulo << ". Confirmar? (1=Si 0=No): ";
+                int conf; cin >> conf;
+                if (conf == 1) { cm->confirmarEliminacionMaterial(); cout << "Material eliminado." << endl; }
+                else { cm->cancelarEliminacionMaterial(); cout << "Cancelado." << endl; }
+                delete dm;
+                break;
+            }
+            case 11: {
+                int d, m, a, h, mn;
+                cout << "Nueva fecha [dd mm aaaa hh mm]: ";
+                cin >> d >> m >> a >> h >> mn;
+                reloj->modificarFecha(d, m, a, h, mn);
+                cout << "Fecha actualizada: " << reloj->toString() << endl;
+                break;
+            }
+            case 12: {
+                cout << "Fecha actual del sistema: " << reloj->toString() << endl;
+                break;
+            }
+            case 13: {
+                cargarDatosPrueba(cu, cm);
+                break;
+            }
+            case 0:
+                salir = true;
+                cout << "Hasta luego." << endl;
                 break;
             default:
-                std::cout << "Opción no válida.\n";
-                break;
+                cout << "Opcion invalida." << endl;
             }
-        }
-        catch (const std::invalid_argument &e)
-        {
-            std::cerr << "ERROR: " << e.what() << std::endl;
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        } catch (const exception& e) {
+            cerr << "ERROR: " << e.what() << endl;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
     }
 
-    // Limpieza de memoria global
-    for (int i = 0; i < topeLectores; i++)
-    {
-        delete lectores[i];
-    }
-    for (int i = 0; i < topeMateriales; i++)
-    {
-        delete materiales[i];
-    }
-
+    delete cs;
+    delete cu;
+    delete cm;
     return 0;
 }
