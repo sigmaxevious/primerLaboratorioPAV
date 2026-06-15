@@ -1,24 +1,20 @@
 #ifndef DTPRESTAMO_H
 #define DTPRESTAMO_H
-#include "Material.h"
+#include <string>
 #include "DTFecha.h"
 
-class DTPrestamo
-{
-    Material *material;
-    DTFecha fechaPrestamo;
-
+class DTPrestamo {
 public:
     std::string codigoMaterial;
     std::string tituloMaterial;
-    DTFecha fechaPrestamo;
-    int diasPermitidos;
+    DTFecha     fechaPrestamo;
+    int         diasPermitidos;
+
     DTPrestamo();
-    DTPrestamo(Material *material, int diasPermitidos, DTFecha fechaPrestamo);
-    DTPrestamo(DTPrestamo &c);
-    int getDiasPermitidos();
-    DTFecha getFechaPrestamo();
-    Material* getMaterialPrestado();
+    DTPrestamo(std::string codigoMaterial, std::string tituloMaterial,
+               DTFecha fechaPrestamo, int diasPermitidos);
+    DTPrestamo(const DTPrestamo &c) = default;
+    DTPrestamo &operator=(const DTPrestamo &c) = default;
     ~DTPrestamo();
 };
 #endif

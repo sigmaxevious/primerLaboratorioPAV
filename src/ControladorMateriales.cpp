@@ -15,21 +15,21 @@ ControladorMateriales::~ControladorMateriales() {}
 
 // guardar datos generales en memoria
 void ControladorMateriales::ingresarDatosMaterial(std::string codigo, std::string titulo, int anio) {
-    codigoMem = codigo;
-    tituloMem = titulo;
-    anioMem   = anio;
+    this->codigoMem = codigo;
+    this->tituloMem = titulo;
+    this->anioMem   = anio;
 }
 
 void ControladorMateriales::ingresarDatosLibro(std::string autor, int cantPag) {
-    esLibroMem  = true;
-    autorMem    = autor;
-    cantPagMem  = cantPag;
+    this->esLibroMem  = true;
+    this->autorMem    = autor;
+    this->cantPagMem  = cantPag;
 }
 
 void ControladorMateriales::ingresarDatosRevista(int numEdicion, bool esMensual) {
-    esLibroMem    = false;
-    numEdicionMem = numEdicion;
-    esMensualMem  = esMensual;
+    this->esLibroMem    = false;
+    this->numEdicionMem = numEdicion;
+    this->esMensualMem  = esMensual;
 }
 
 bool ControladorMateriales::confirmarRegistro() {

@@ -15,7 +15,6 @@ class Lector : public Usuario
 public:
     Lector();
     Lector(std::string ci, std::string nombre, std::string password, DTFecha fechaRegistro);
-    Lector(const Lector& c);
     DTFecha getFecha() const;
     int getCantidadPrestamos() const;
     Prestamo** getPrestamos();

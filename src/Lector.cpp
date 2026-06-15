@@ -3,8 +3,6 @@
 
 Lector::Lector()
 {
-    this->ci = "";
-    this->nombre = "";
     this->fechaRegistro = DTFecha();
     for (int i = 0; i < 10; i++) {
         this->prestamos[i] = nullptr;
@@ -12,9 +10,7 @@ Lector::Lector()
     this->cantidadPrestamos = 0;
 }
 
-Lector::Lector(std::string ci, std::string nombre, DTFecha fechaRegistro) {
-    this->ci = ci;
-    this->nombre = nombre;
+Lector::Lector(DTFecha fechaRegistro) {
     this->fechaRegistro = fechaRegistro;
     for (int i = 0; i < 10; i++) {
         this->prestamos[i] = nullptr;
@@ -22,19 +18,7 @@ Lector::Lector(std::string ci, std::string nombre, DTFecha fechaRegistro) {
     this->cantidadPrestamos = 0;
     }
 
-/* Lector::Lector(Lector &c) {
-    this->ci = c.ci;
-    this->nombre = c.nombre;
-    this->fechaRegistro = c.fechaRegistro; 
-    for (int i = 0; i < 10; i++) {
-        this->prestamos[i] = c.prestamos[i];
-    }
-    this->cantidadPrestamos = c.cantidadPrestamos;
-}
-    Constructor por copia es problemático, lo voy a dejar de lado, comentado pa decirle a Carlos si lo necesita */
-std::string Lector::getCi() const {
-    return this->ci;
-}
+
 std::string Lector::getNombre() const  {
     return this->nombre;
 }

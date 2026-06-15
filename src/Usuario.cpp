@@ -1,18 +1,31 @@
+#include "../include/Usuario.h"
 
-    Usuario::Usuario() {
-        
-    }
+Usuario::Usuario() {
+    this->ci       = "";
+    this->nombre   = "";
+    this->password = "";
+}
 
-    Usuario(std::string ci, std::string nombre, std::string password);
-    Usuario(Usuario &c);
-    std::string getCi() const;
-    std::string getNombre() const;
-    std::string getPassword() const;
-    // DTFecha getFecha() const; esto será sólo de LECTOR
-    // int getCantidadPrestamos() const;
-    // Prestamo** getPrestamos();
-    // void addPrestamo(Prestamo* prestamo);
-    bool checkPassword(std::string password) const;
-    virtual ~Usuario();
-};
-#endif
+Usuario::Usuario(std::string ci, std::string nombre, std::string password) {
+    this->ci       = ci;
+    this->nombre   = nombre;
+    this->password = password;
+}
+
+std::string Usuario::getCi() const {
+    return this->ci;
+}
+
+std::string Usuario::getNombre() const {
+    return this->nombre;
+}
+
+std::string Usuario::getPassword() const {
+    return this->password;
+}
+
+bool Usuario::checkPassword(std::string password) const {
+    return this->password == password;
+}
+
+Usuario::~Usuario() {}

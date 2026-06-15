@@ -13,7 +13,6 @@ class Usuario {
 public:
     Usuario();
     Usuario(std::string ci, std::string nombre, std::string password);
-    Usuario(Usuario &c);
     std::string getCi() const;
     std::string getNombre() const;
     std::string getPassword() const;
