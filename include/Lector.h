@@ -21,5 +21,6 @@ Lector(std::string ci, std::string nombre, std::string password, DTFecha fechaRe
     Prestamo** getPrestamos();
     void addPrestamo(Prestamo* prestamo);
     ~Lector();
+    std::string tipoUsuario() const override;
 };
 #endif

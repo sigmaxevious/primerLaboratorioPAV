@@ -1,4 +1,7 @@
 #include "../include/DTFecha.h"
+#include <sstream>
+#include <iomanip>
+#include <string>
 
 DTFecha::DTFecha()
 {
@@ -24,7 +27,11 @@ int DTFecha::getAnio() const
 {
     return anio;
 }
-
+std::string DTFecha::toString() const {
+    std::ostringstream oss;
+    oss << dia << "/" << mes << "/" << anio;
+    return oss.str();
+}
 bool DTFecha::esAnterior(const DTFecha &otra) const
 {
     if (this->anio < otra.anio)

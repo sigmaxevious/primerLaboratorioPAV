@@ -5,8 +5,7 @@
 #include <string>
 #include "DTMaterial.h"
 #include "DTMaterialResumen.h"
-
-class Material;
+#include "Material.h"
 
 class IControladorMateriales {
 public:

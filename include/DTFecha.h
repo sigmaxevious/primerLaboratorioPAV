@@ -1,5 +1,7 @@
 #ifndef DTFECHA_H
 #define DTFECHA_H
+#include <string>
+#include <sstream>
 
 class DTFecha
 {
@@ -19,5 +21,6 @@ public:
     // Compara la primera fecha con la segunda, devuelve true si la primera es menor a la segunda, false en caso contrario
     bool esAnterior(const DTFecha &otra) const;
     ~DTFecha();
+    std::string toString() const;
 };
 #endif

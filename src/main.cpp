@@ -56,6 +56,7 @@ void cargarDatosPrueba(IControladorUsuarios* cu, IControladorMateriales* cm) {
     cout << "  Datos de prueba cargados OK." << endl;
 }
 
+
 int main() {
     Fabrica* fab = Fabrica::getInstancia();
     IControladorSesion*     cs = fab->getControladorSesion();
@@ -184,7 +185,8 @@ int main() {
                 for (DTPrestamo* p : dlp->prestamos) {
                     cout << "  - " << p->tituloMaterial
                          << " | Codigo: " << p->codigoMaterial
-                         << " | Dias: " << p->diasPermitidos << endl;
+                         << " | Dias: " << p->diasPermitidos 
+                         << " | Fecha: " << p->fechaPrestamo.toString()  << endl;
                 }
                 delete dlp;
                 break;

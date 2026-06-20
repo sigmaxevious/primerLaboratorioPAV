@@ -22,5 +22,6 @@ public:
     // void addPrestamo(Prestamo* prestamo);
     bool checkPassword(std::string password) const;
     virtual ~Usuario();
+    virtual std::string tipoUsuario() const = 0;
 };
 #endif
